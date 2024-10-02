@@ -1,0 +1,21 @@
+{
+  "name": "iot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^4.21.0",
+    "json-server": "^1.0.0-beta.1",
+    "method-override": "^3.0.0",
+    "mongoose": "^8.5.4",
+    "mqtt": "^5.10.1",
+    "nodemon": "^3.1.4",
+    "pug": "^3.0.3"
+  }
+}

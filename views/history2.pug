@@ -1,0 +1,49 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Lịch sử đo thời tiết
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+    link(rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css")
+    link(rel="stylesheet" href="/css/footer.css")
+    link(rel="stylesheet" href="/css/header.css")
+  body
+    .wrapper
+      header
+        include ./header/header.pug
+    .container.mt-5
+      h2 Lịch sử đo thời tiết
+      form(action="", method="GET", class="mb-4 form-search")
+        .form-group
+          label(for="weatherFilter") Bộ lọc chỉ số
+          select#weatherFilter.form-control(name="weatherFilter")
+            option(value="all") Tất cả
+            option(value="temperature") Nhiệt độ
+            option(value="humidity") Độ ẩm
+            option(value="light") Ánh sáng
+        button(type="submit" class="btn btn-primary") Lọc
+
+      table#weatherTable.table.table-striped
+        thead
+          tr
+            th STT
+            th Nhiệt độ
+            th Độ ẩm
+            th Ánh sáng
+            th Thời điểm đo
+        tbody
+          - var cnt = 1
+          each record in records
+            tr
+              td #{cnt++}
+              td #{record.temperature}
+              td #{record.humidity}
+              td #{record.light}
+              td #{record.time}
+
+    script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
+    script(src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js")
+    script(src="/js/history2.js") // 
