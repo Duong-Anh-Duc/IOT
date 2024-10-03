@@ -1,0 +1,44 @@
+// history1
+// $(document).ready(function() {
+//   // Lấy số trang từ URL nếu có
+//   function getPageFromUrl() {
+//     const urlParams = new URLSearchParams(window.location.search);
+//     const page = urlParams.get('page');
+//     return page ? parseInt(page) : 1;
+//   }
+
+//   // Hàm cập nhật URL với tham số page
+//   function updateUrl(page) {
+//     const url = new URL(window.location);
+//     url.searchParams.set('page', page);
+//     window.history.pushState({}, '', url);  // Cập nhật URL mà không tải lại trang
+//   }
+
+//   // Khởi tạo DataTables
+//   var table = $('#deviceTable').DataTable({
+//     "stateSave": true, // Bật tính năng lưu trạng thái
+//     "language": {
+//       "lengthMenu": "Hiển thị _MENU_ bản ghi trên mỗi trang",
+//       "zeroRecords": "Không tìm thấy bản ghi nào",
+//       "info": "Hiển thị _START_ đến _END_ của _TOTAL_ bản ghi",
+//       "infoEmpty": "Không có bản ghi nào",
+//       "infoFiltered": "(lọc từ _MAX_ bản ghi)",
+//       "search": "Tìm kiếm:",
+//       "paginate": {
+//         "first": "Trang đầu",
+//         "last": "Trang cuối",
+//         "next": "Tiếp",
+//         "previous": "Trước"
+//       }
+//     },
+//     "pageLength": 10, // Số bản ghi trên mỗi trang
+//     "displayStart": (getPageFromUrl() - 1) * 10 // Khởi động từ trang lấy từ URL
+//   });
+
+//   // Lắng nghe sự kiện thay đổi trang và cập nhật URL
+//   table.on('draw', function() {
+//     const info = table.page.info();
+//     const currentPage = info.page + 1; // Lấy số trang hiện tại
+//     updateUrl(currentPage); // Cập nhật URL với số trang hiện tại
+//   });
+// });

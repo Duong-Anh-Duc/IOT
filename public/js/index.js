@@ -47,77 +47,73 @@ document.addEventListener('DOMContentLoaded', function() {
       }
   });
 });
-const buttonChangStatus = document.querySelectorAll("[button-change-status]");
+const buttonChangeStatus = document.querySelectorAll("[button-change-status]");
 
-if (buttonChangStatus.length > 0) {
-  console.log("Đã tìm thấy các nút cần xử lý");  // Kiểm tra xem có tìm thấy các nút không
-  buttonChangStatus.forEach(button => {
-    button.addEventListener("click", async () => {
-      console.log("Nút đã được nhấn");  // Kiểm tra sự kiện click
+  if (buttonChangeStatus.length > 0) {
+    buttonChangeStatus.forEach(button => {
+      button.addEventListener("click", async () => {
+        const status = button.getAttribute("data-status");
+        const id = button.getAttribute("data-id");
+        let statusChange = status === "on" ? "off" : "on";
 
-      const status = button.getAttribute("data-status");
-      const id = button.getAttribute("data-id");
-      let statusChange = status === "on" ? "off" : "on";
+        const icon = document.querySelector(`[data-id='${id}-icon']`);
 
-      // Lấy phần tử biểu tượng bằng cách tìm kiếm qua thuộc tính data-id
-      const icon = document.querySelector(`[data-id='${id}-icon']`);
+        try {
+          const response = await axios.post(`/change-status/${statusChange}/${id}`);
+          const newStatus = response.data.newStatus;
+          button.setAttribute("data-status", newStatus);
 
-      try {
-        const response = await axios.post(`/change-status/${statusChange}/${id}`);
-        const newStatus = response.data.newStatus;
-        button.setAttribute("data-status", newStatus);
-
-        // Cập nhật nút trạng thái và biểu tượng cho các thiết bị
-        if (newStatus === "on") {
-          button.classList.remove('badge-danger');
-          button.classList.add('badge-success');
-          button.textContent = 'Bật';
-
-          // Cập nhật icon tương ứng với thiết bị bật
-          if (icon) {
-            if (icon.classList.contains('fa-fan')) {
-              // Xử lý quạt quay
-              icon.classList.remove('fan-off');
-              icon.classList.add('fan-on');
-            } else if (icon.classList.contains('fa-lightbulb')) {
-              // Xử lý đèn sáng
-              icon.classList.remove('light-off');
-              icon.classList.add('light-on');
-            } else if (icon.classList.contains('fa-snowflake')) {
-              // Xử lý điều hòa bật
-              icon.classList.remove('text-muted');
-              icon.classList.add('fan-on'); // Điều hòa bật
-            }
+          // Cập nhật nút trạng thái và biểu tượng cho các thiết bị
+          if (newStatus === "on") {
+            button.classList.remove('badge-danger');
+            button.classList.add('badge-success');
+            button.textContent = 'Bật';
+            if (icon) updateIconOn(icon);
+          } else {
+            button.classList.remove('badge-success');
+            button.classList.add('badge-danger');
+            button.textContent = 'Tắt';
+            if (icon) updateIconOff(icon);
           }
 
-        } else {
-          button.classList.remove('badge-success');
-          button.classList.add('badge-danger');
-          button.textContent = 'Tắt';
+          // Gọi hàm để cập nhật bảng lịch sử bật/tắt
 
-          // Cập nhật icon tương ứng với thiết bị tắt
-          if (icon) {
-            if (icon.classList.contains('fa-fan')) {
-              // Xử lý quạt dừng quay
-              icon.classList.remove('fan-on');
-              icon.classList.add('fan-off');
-            } else if (icon.classList.contains('fa-lightbulb')) {
-              // Xử lý đèn tắt
-              icon.classList.remove('light-on');
-              icon.classList.add('light-off');
-            } else if (icon.classList.contains('fa-snowflake')) {
-              // Xử lý điều hòa tắt
-              icon.classList.remove('fan-on');
-              icon.classList.add('text-muted'); // Điều hòa tắt
-            }
-          }
+        } catch (error) {
+          console.error('Lỗi khi thay đổi trạng thái thiết bị:', error);
         }
-      } catch (error) {
-        console.error('Error updating status:', error);
-      }
+      });
     });
-  });
-}
+  }
+
+  // Hàm cập nhật biểu tượng khi thiết bị được bật
+  function updateIconOn(icon) {
+    if (icon.classList.contains('fa-fan')) {
+      icon.classList.remove('fan-off');
+      icon.classList.add('fan-on');
+    } else if (icon.classList.contains('fa-lightbulb')) {
+      icon.classList.remove('light-off');
+      icon.classList.add('light-on');
+    } else if (icon.classList.contains('fa-snowflake')) {
+      icon.classList.remove('text-muted');
+      icon.classList.add('fan-on');
+    }
+  }
+
+  // Hàm cập nhật biểu tượng khi thiết bị được tắt
+  function updateIconOff(icon) {
+    if (icon.classList.contains('fa-fan')) {
+      icon.classList.remove('fan-on');
+      icon.classList.add('fan-off');
+    } else if (icon.classList.contains('fa-lightbulb')) {
+      icon.classList.remove('light-on');
+      icon.classList.add('light-off');
+    } else if (icon.classList.contains('fa-snowflake')) {
+      icon.classList.remove('fan-on');
+      icon.classList.add('text-muted');
+    }
+  }
+
+  // Hàm để cập nhật bảng lịch sử bật/tắt trên trang lịch sử
 // Giả sử bạn nhận dữ liệu nhiệt độ, độ ẩm và ánh sáng từ server
 const temperatureValue = 30; // ví dụ: nhiệt độ
 const humidityValue = 65;    // ví dụ: độ ẩm
