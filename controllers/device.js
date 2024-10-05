@@ -12,7 +12,6 @@ module.exports.index = async (req, res) => {
         }
         )
 }
-
 module.exports.saveSensorData = async (temperature, humidity, light) => {
   try {
       const newData = new Weather({
@@ -32,41 +31,18 @@ module.exports.history2 = async (req, res) => {
             records : records,
       })
 }
-module.exports.getHistoryData = async (req, res) => {
-  let filter = req.query.deviceFilter || 'all';
-  let data = [];
-
-  if (filter !== 'all') {
-      data = await History.find({ Name: filter });
-  } else {
-      data = await History.find();
-  }
-
-  data.forEach(item => {
-      const date = new Date(item.createdAt);
-      item.DateandHour = date.toLocaleDateString('vi-VN', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric'
-      }) + ' ' + date.toLocaleTimeString('vi-VN', {
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit'
-      });
-  });
-
-  // Trả về dữ liệu JSON cho AJAX
-  res.json({ data: data });
-};
 module.exports.history1 = async (req, res) => {
-    let filter = req.query.deviceFilter;
-    let data = [];
-    if(filter != 'all' && filter){
-        data = await History.find({Name : filter});
-    }
-    else if(filter == 'all' || !filter){
-        data = await History.find();
-    }
+    let filter = req.query.deviceFilter || 'all';
+    let page = parseInt(req.query.page) || 1;  
+    let limit = parseInt(req.query.limit) || 10; 
+    let skip = (page - 1) * limit;  
+    let totalRecords = filter === 'all' || !filter ? 
+                        await History.countDocuments() : 
+                        await History.countDocuments({ Name: filter });
+
+    let data = filter !== 'all' && filter ? 
+                await History.find({ Name: filter }).skip(skip).limit(limit) : 
+                await History.find().skip(skip).limit(limit);
     data.forEach(item => {
         const date = new Date(item.createdAt);
         item.DateandHour = date.toLocaleDateString('vi-VN', {
@@ -79,20 +55,29 @@ module.exports.history1 = async (req, res) => {
             second: '2-digit'
         });
     });
+    if (req.headers['x-requested-with'] === 'XMLHttpRequest') {
+        return res.render("../partials/deviceTable.pug", {
+            data: data,
+            deviceFilter: filter,
+            currentPage: page,
+            totalPages: Math.ceil(totalRecords / limit),
+            limit: limit
+        });
+    }
     res.render("../views/history1.pug", {
         data: data,
-        deviceFilter : filter
+        deviceFilter: filter,
+        currentPage: page,
+        totalPages: Math.ceil(totalRecords / limit), 
+        limit: limit
     });
 };
-
 module.exports.changeStatus = async (req, res) => {
     const TT = req.params.TT;
     const id = req.params.id;
-    // Cập nhật trạng thái thiết bị
     await Device.updateOne({_id: id}, {TT: TT});
     const data = await Device.findOne({_id: id});
   
-    // Lưu lịch sử
     await History.create({
       Name: data.Name,
       TT: data.TT
@@ -101,6 +86,5 @@ module.exports.changeStatus = async (req, res) => {
         const mqttMessage = TT === "on" ? "all:1" : "all:0";
         mqttService.publishMessage('home/device/control', mqttMessage);
     }
-    // Trả về phản hồi JSON với trạng thái mới
     res.json({ newStatus: data.TT });
   };

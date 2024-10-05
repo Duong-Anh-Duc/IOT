@@ -4,10 +4,8 @@ const controller = require("../controllers/device");
 router.get("/profile", (req, res) => {
     res.render("profile.pug");
 });
-
 router.get("/History1", controller.history1);
 router.get("/History2", controller.history2);
 router.get("/", controller.index);
 router.post("/change-status/:TT/:id", controller.changeStatus);
-router.get("/getHistoryData", controller.getHistoryData);
 module.exports = router;

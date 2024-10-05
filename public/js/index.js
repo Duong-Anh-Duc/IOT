@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Initialize Chart.js
   const ctx = document.getElementById('myChart').getContext('2d');
   const myChart = new Chart(ctx, {
       type: 'line', 
@@ -62,8 +61,6 @@ const buttonChangeStatus = document.querySelectorAll("[button-change-status]");
           const response = await axios.post(`/change-status/${statusChange}/${id}`);
           const newStatus = response.data.newStatus;
           button.setAttribute("data-status", newStatus);
-
-          // Cập nhật nút trạng thái và biểu tượng cho các thiết bị
           if (newStatus === "on") {
             button.classList.remove('badge-danger');
             button.classList.add('badge-success');
@@ -75,9 +72,6 @@ const buttonChangeStatus = document.querySelectorAll("[button-change-status]");
             button.textContent = 'Tắt';
             if (icon) updateIconOff(icon);
           }
-
-          // Gọi hàm để cập nhật bảng lịch sử bật/tắt
-
         } catch (error) {
           console.error('Lỗi khi thay đổi trạng thái thiết bị:', error);
         }
@@ -85,7 +79,6 @@ const buttonChangeStatus = document.querySelectorAll("[button-change-status]");
     });
   }
 
-  // Hàm cập nhật biểu tượng khi thiết bị được bật
   function updateIconOn(icon) {
     if (icon.classList.contains('fa-fan')) {
       icon.classList.remove('fan-off');
@@ -99,7 +92,6 @@ const buttonChangeStatus = document.querySelectorAll("[button-change-status]");
     }
   }
 
-  // Hàm cập nhật biểu tượng khi thiết bị được tắt
   function updateIconOff(icon) {
     if (icon.classList.contains('fa-fan')) {
       icon.classList.remove('fan-on');
@@ -112,49 +104,41 @@ const buttonChangeStatus = document.querySelectorAll("[button-change-status]");
       icon.classList.add('text-muted');
     }
   }
-
-  // Hàm để cập nhật bảng lịch sử bật/tắt trên trang lịch sử
-// Giả sử bạn nhận dữ liệu nhiệt độ, độ ẩm và ánh sáng từ server
-const temperatureValue = 30; // ví dụ: nhiệt độ
-const humidityValue = 65;    // ví dụ: độ ẩm
-const lightValue = 500;      // ví dụ: ánh sáng
-
-// Cập nhật icon cho nhiệt độ
+const temperatureValue = 30; 
+const humidityValue = 65;    
+const lightValue = 500;      
 const tempIcon = document.querySelector('#card-temp i');
 const tempText = document.querySelector('#text-temp');
 console.log(tempText)
 tempText.textContent = `${temperatureValue}°C`;
 
 if (temperatureValue < 20) {
-  tempIcon.className = 'fas fa-thermometer-quarter'; // Nhiệt độ thấp
+  tempIcon.className = 'fas fa-thermometer-quarter'; 
 } else if (temperatureValue >= 20 && temperatureValue <= 30) {
-  tempIcon.className = 'fas fa-thermometer-half'; // Nhiệt độ trung bình
+  tempIcon.className = 'fas fa-thermometer-half'; 
 } else {
-  tempIcon.className = 'fas fa-thermometer-full'; // Nhiệt độ cao
+  tempIcon.className = 'fas fa-thermometer-full'; 
 }
 
-// Cập nhật icon cho độ ẩm
 const humidIcon = document.querySelector('#card-humid i');
 const humidText = document.querySelector('#text-humid');
 humidText.textContent = `${humidityValue}%`;
 
 if (humidityValue < 40) {
-  humidIcon.className = 'fas fa-tint-slash'; // Độ ẩm thấp
+  humidIcon.className = 'fas fa-tint-slash'; 
 } else if (humidityValue >= 40 && humidityValue <= 60) {
-  humidIcon.className = 'fas fa-tint'; // Độ ẩm trung bình
+  humidIcon.className = 'fas fa-tint';
 } else {
-  humidIcon.className = 'fas fa-cloud-rain'; // Độ ẩm cao
+  humidIcon.className = 'fas fa-cloud-rain'; 
 }
-
-// Cập nhật icon cho ánh sáng
 const lightIcon = document.querySelector('#card-light i');
 const lightText = document.querySelector('#text-light');
 lightText.textContent = `${lightValue} Lux`;
 
 if (lightValue < 200) {
-  lightIcon.className = 'fas fa-moon'; // Ánh sáng yếu
+  lightIcon.className = 'fas fa-moon'; 
 } else if (lightValue >= 200 && lightValue <= 700) {
-  lightIcon.className = 'fas fa-sun'; // Ánh sáng trung bình
+  lightIcon.className = 'fas fa-sun'; 
 } else {
-  lightIcon.className = 'fas fa-lightbulb'; // Ánh sáng mạnh
+  lightIcon.className = 'fas fa-lightbulb';
 }

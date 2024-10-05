@@ -4,17 +4,17 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Lịch sử bật tắt thiết bị
-    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
-    link(rel="stylesheet" href="/css/history1.css") 
-    link(rel="stylesheet" href="/css/footer.css")
-    link(rel="stylesheet" href="/css/header.css")
-    link(rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css")
+    link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+    link(rel="stylesheet", href="/css/history1.css") 
+    link(rel="stylesheet", href="/css/footer.css")
+    link(rel="stylesheet", href="/css/header.css")
+    link(rel="stylesheet", href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css")
   body
     .wrapper
       include ./header/header.pug
       .container.mt-5
         h2 Lịch sử bật tắt thiết bị
-        form(action="", method="GET", class="mb-4 form-search")
+        form(action="", method="GET", class="mb-4 form-search d-flex justify-content-between align-items-center", id="filterForm")
           .form-group
             label(for="deviceFilter") Bộ lọc thiết bị
             select#deviceFilter.form-control(name="deviceFilter")
@@ -22,26 +22,17 @@ html(lang="en")
               option(value="Đèn" selected=(deviceFilter === 'Đèn')) Đèn
               option(value="Quạt" selected=(deviceFilter === 'Quạt')) Quạt
               option(value="Điều hoà" selected=(deviceFilter === 'Điều hoà')) Điều hoà
-          button(type="submit" class="btn btn-primary") Lọc
-          
-        table#deviceTable.table.table-striped
-          thead
-            tr
-              th STT
-              th Thiết bị
-              th Trạng thái
-              th Thời điểm
-          tbody 
-            - var cnt = 1
-            each item in data
-              tr
-                td #{cnt++}
-                td #{item.Name}
-                td #{item.TT}
-                td #{item.DateandHour}
+          .form-group
+            label(for="limitSelect") Số bản ghi mỗi trang
+            select#limitSelect.form-control(name="limit")
+              option(value="10" selected=(limit == 10)) 10
+              option(value="25" selected=(limit == 25)) 25
+              option(value="50" selected=(limit == 50)) 50
+              option(value="100" selected=(limit == 100)) 100
+        div#tableWrapper
+          include ../partials/deviceTable.pug
     script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
     script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
     script(src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js")
-    script(src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js")
     script(src="/js/history1.js")
