@@ -3,7 +3,7 @@ table#deviceTable.table.table-striped
     tr
       th STT
       th Thiết bị
-      th Trạng thái
+      th Thao Tác
       th Thời điểm
   tbody 
     - var cnt = (currentPage - 1) * limit + 1
@@ -11,14 +11,18 @@ table#deviceTable.table.table-striped
       tr
         td #{cnt++}
         td #{item.Name}
-        td #{item.TT}
-        td #{item.DateandHour}
+        td 
+          if item.TT == 'on'
+            | Bật
+          else
+            | Tắt
+        td #{item.Day} #{item.Hour}
 if totalPages > 1
   nav
     ul.pagination
       if currentPage > 1
         li.page-item
-          a.page-link(href=`?deviceFilter=${deviceFilter}&page=${currentPage - 1}&limit=${limit}`) Trang Trước
+          a.page-link(href=`?deviceFilter=${deviceFilter}&page=${currentPage - 1}&limit=${limit}&sortOrder=${sortOrder}`) Trang Trước
       else
         li.page-item.disabled
           span.page-link Trang Trước
@@ -28,10 +32,10 @@ if totalPages > 1
             span.page-link #{page}
         else
           li.page-item
-            a.page-link(href=`?deviceFilter=${deviceFilter}&page=${page}&limit=${limit}`) #{page}
+            a.page-link(href=`?deviceFilter=${deviceFilter}&page=${page}&limit=${limit}&sortOrder=${sortOrder}`) #{page}
       if currentPage < totalPages
         li.page-item
-          a.page-link(href=`?deviceFilter=${deviceFilter}&page=${currentPage + 1}&limit=${limit}`) Trang Sau
+          a.page-link(href=`?deviceFilter=${deviceFilter}&page=${currentPage + 1}&limit=${limit}&sortOrder=${sortOrder}`) Trang Sau
       else
         li.page-item.disabled
           span.page-link Trang Sau

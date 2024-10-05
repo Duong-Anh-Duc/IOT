@@ -12,10 +12,13 @@ const WeatherSchema = new mongoose.Schema({
         type: Number,  
         required: true  
     },
-    time : {
-        type : Date,
-        default : Date.now
+    Day : {
+        type : String
+    },
+    Hour : {
+        type : String
     }
+    
 })
 
 const Weather = mongoose.model("Weather", WeatherSchema, "weather")

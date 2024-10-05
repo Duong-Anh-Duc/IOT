@@ -5,7 +5,7 @@ html(lang="en")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Lịch sử bật tắt thiết bị
     link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
-    link(rel="stylesheet", href="/css/history1.css") 
+    link(rel="stylesheet", href="/css/history1.css")
     link(rel="stylesheet", href="/css/footer.css")
     link(rel="stylesheet", href="/css/header.css")
     link(rel="stylesheet", href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css")
@@ -29,6 +29,15 @@ html(lang="en")
               option(value="25" selected=(limit == 25)) 25
               option(value="50" selected=(limit == 50)) 50
               option(value="100" selected=(limit == 100)) 100
+          .form-group
+            label(for="sortOrder") Sắp xếp theo thời gian
+            select#sortOrder.form-control(name="sortOrder")
+              option(value="asc" selected=(sortOrder === 'asc')) Tăng dần
+              option(value="desc" selected=(sortOrder === 'desc')) Giảm dần
+          .form-group
+            label(for="dateFilter") Chọn ngày
+            input#dateFilter.form-control(type="date", name="dateFilter")
+          button.btn.btn-primary#filterButton(type="submit") Lọc
         div#tableWrapper
           include ../partials/deviceTable.pug
     script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")

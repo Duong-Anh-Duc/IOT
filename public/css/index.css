@@ -1,135 +1,104 @@
-/* Đặt lại toàn bộ margin và padding */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
 body {
   font-family: Arial, sans-serif;
-  background: linear-gradient(120deg, #74ebd5, #acb6e5); /* Hiệu ứng nền gradient */
+  background: linear-gradient(120deg, #74ebd5, #acb6e5); 
   color: #333;
 }
-
 header {
-  background-color: #007bff; /* Màu nền cho header */
+  background-color: #007bff;
   padding: 10px;
 }
-
 header nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
 .container-fluid {
   padding: 20px;
 }
-
-/* Sử dụng flexbox để tạo bố cục cho các card */
 .row {
-  display: flex; /* Sử dụng flexbox cho các card */
-  justify-content: space-between; /* Căn chỉnh các card với khoảng cách đều */
+  display: flex;
+  justify-content: space-between; 
 }
-
-/* Card Nhiệt độ */
 #card-temp {
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4); /* Màu hồng nhạt */
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4); 
   transition: transform 0.2s, box-shadow 0.2s;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
 #card-temp:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
-
-/* Card Độ ẩm */
 #card-humid {
-  background: linear-gradient(135deg, #a1c4fd, #c2e9fb); /* Màu xanh nhạt */
+  background: linear-gradient(135deg, #a1c4fd, #c2e9fb); 
   transition: transform 0.2s, box-shadow 0.2s;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
 #card-humid:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
-
-/* Card Ánh sáng */
 #card-light {
-  background: linear-gradient(135deg, #fbc2eb, #a6c1ee); /* Màu tím nhạt */
+  background: linear-gradient(135deg, #fbc2eb, #a6c1ee); 
   transition: transform 0.2s, box-shadow 0.2s;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
 #card-light:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
-
-/* Card Bóng đèn */
 .card-light {
-  background: linear-gradient(135deg, #333333, #555555); /* Màu đen nhẹ và xám đậm */
+  background: linear-gradient(135deg, #333333, #555555); 
   transition: transform 0.2s, box-shadow 0.2s;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  color: #fff; /* Màu chữ chuyển sang trắng để tương phản với nền đen */
+  color: #fff; 
 }
-
 .card-light:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
-
-/* Card Quạt */
 .card-fan {
-  background: linear-gradient(135deg, #96c93d, #00b09b); /* Màu xanh lá kết hợp xanh dương */
+  background: linear-gradient(135deg, #96c93d, #00b09b);
   transition: transform 0.2s, box-shadow 0.2s;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
 .card-fan:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
-
-/* Card Điều hòa */
 .card-ac {
-  background: linear-gradient(135deg, #f5f7fa, #c3cfe2); /* Màu xám nhạt xanh */
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2); 
   transition: transform 0.2s, box-shadow 0.2s;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
 .card-ac:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
-
-/* Style chung cho card nội dung */
 .card-body {
   text-align: center;
   padding: 20px;
 }
-
 .card h3 {
   margin-bottom: 10px;
   font-size: 1.7rem;
-  color: #007bff; /* Màu xanh cho tiêu đề */
+  color: #007bff; 
 }
-
 .card h1 {
   font-size: 3rem;
   margin-bottom: 20px;
-  color: #333; /* Màu của số liệu */
+  color: #333;
 }
-
-/* Style cho nút bật/tắt */
 .badge {
   padding: 10px 20px;
   font-size: 16px;
@@ -142,69 +111,51 @@ header nav {
   cursor: pointer;
   transition: background-color 0.3s;
 }
-
-/* Màu sắc cho trạng thái bật/tắt */
 .badge-success {
-  background-color: #28a745; /* Màu xanh lá cho bật */
+  background-color: #28a745;
 }
 
 .badge-danger {
-  background-color: #dc3545; /* Màu đỏ cho tắt */
+  background-color: #dc3545; 
 }
-
 .badge:hover {
-  opacity: 0.8; /* Hiệu ứng hover cho nút */
+  opacity: 0.8; 
 }
-
-/* Style cho biểu đồ */
 #chart-card {
   margin-top: 20px;
-  background-color: rgba(255, 255, 255, 0.8); /* Màu nền mờ cho biểu đồ */
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
 canvas {
   max-width: 100%;
   height: auto;
 }
-
-/* Biểu tượng đèn sáng và tắt */
 .light-on {
   color: #FFD700;
   font-size: 3em;
 }
-
 .light-off {
   color: #6c757d;
   font-size: 3em;
 }
-
-/* Quạt quay và không quay */
 .fan-on {
   animation: spin 1s infinite linear;
   font-size: 3em;
 }
-
 .fan-off {
   opacity: 0.5;
   font-size: 3em;
 }
-
-/* Điều hòa bật và tắt */
 .fas.fa-snowflake {
   font-size: 3em;
 }
-
 .text-muted {
   opacity: 0.5;
 }
-
-/* Tăng khoảng cách giữa icon và nút bật/tắt */
 .img-box {
   margin-top: 30px;
 }
-
 @keyframes spin {
   from {
     transform: rotate(0deg);
