@@ -19,7 +19,11 @@ const WeatherSchema = new mongoose.Schema({
         type : String
     }
     
-})
+},
+{
+    timestamps : true
+}
+)
 
 const Weather = mongoose.model("Weather", WeatherSchema, "weather")
 module.exports = Weather

@@ -1,0 +1,40 @@
+table#weatherTable.table.table-striped
+  thead
+    tr
+      th STT
+      th Nhiệt độ (°C)
+      th Độ ẩm (%)
+      th Ánh sáng (lux)
+      th Thời điểm đo
+  tbody
+    - var cnt = (currentPage - 1) * limit + 1
+    each record in records
+      tr
+        td #{cnt++}
+        td #{record.temperature}°C
+        td #{record.humidity}%
+        td #{record.light} lux
+        td #{record.Day} #{record.Hour}
+
+if totalPages > 1
+  nav
+    ul.pagination
+      if currentPage > 1
+        li.page-item
+          a.page-link(href=`?page=${currentPage - 1}&limit=${limit}`) Trang Trước
+      else
+        li.page-item.disabled
+          span.page-link Trang Trước
+      each page in [...Array(totalPages).keys()].map(i => i + 1)
+        if page === currentPage
+          li.page-item.active
+            span.page-link #{page}
+        else
+          li.page-item
+            a.page-link(href=`?page=${page}&limit=${limit}`) #{page}
+      if currentPage < totalPages
+        li.page-item
+          a.page-link(href=`?page=${currentPage + 1}&limit=${limit}`) Trang Sau
+      else
+        li.page-item.disabled
+          span.page-link Trang Sau

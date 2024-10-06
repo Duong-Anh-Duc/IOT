@@ -36,7 +36,7 @@ html(lang="en")
               option(value="desc" selected=(sortOrder === 'desc')) Giảm dần
           .form-group
             label(for="dateFilter") Chọn ngày
-            input#dateFilter.form-control(type="date", name="dateFilter")
+            input#dateFilter.form-control(type="date", name="dateFilter", value=(dateFilter || ''))
           button.btn.btn-primary#filterButton(type="submit") Lọc
         div#tableWrapper
           include ../partials/deviceTable.pug

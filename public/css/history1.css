@@ -57,7 +57,7 @@ tbody tr:hover {
 #filterButton {
   flex-shrink: 0;
   width: 80px;
-  margin-top: 8px; /* Điều chỉnh khoảng cách nút lọc xuống dưới */
+  margin-top: 8px; 
 }
 
 @media (max-width: 768px) {

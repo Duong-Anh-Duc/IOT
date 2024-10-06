@@ -15,36 +15,41 @@ html(lang="en")
         include ./header/header.pug
     .container.mt-5
       h2 Lịch sử đo thời tiết
-      form(action="", method="GET", class="mb-4 form-search")
+      form(action="", method="GET", class="mb-4 form-search d-flex justify-content-between align-items-center", id="filterForm")
         .form-group
-          label(for="weatherFilter") Bộ lọc chỉ số
-          select#weatherFilter.form-control(name="weatherFilter")
-            option(value="all") Tất cả
-            option(value="temperature") Nhiệt độ
-            option(value="humidity") Độ ẩm
-            option(value="light") Ánh sáng
-        button(type="submit" class="btn btn-primary") Lọc
-
-      table#weatherTable.table.table-striped
-        thead
-          tr
-            th STT
-            th Nhiệt độ
-            th Độ ẩm
-            th Ánh sáng
-            th Thời điểm đo
-        tbody
-          - var cnt = 1
-          each record in records
-            tr
-              td #{cnt++}
-              td #{record.temperature}
-              td #{record.humidity}
-              td #{record.light}
-              td #{record.time}
+          label(for="temperatureSort") Sắp xếp theo Nhiệt độ
+          select#temperatureSort.form-control(name="temperatureSort")
+            option(value="none" selected=(temperatureSort === 'none' || temperatureSort === undefined)) Không sắp xếp
+            option(value="asc" selected=(temperatureSort === 'asc')) Tăng dần
+            option(value="desc" selected=(temperatureSort === 'desc')) Giảm dần
+        .form-group
+          label(for="humiditySort") Sắp xếp theo Độ ẩm
+          select#humiditySort.form-control(name="humiditySort")
+            option(value="none" selected=(humiditySort === 'none' || humiditySort === undefined)) Không sắp xếp
+            option(value="asc" selected=(humiditySort === 'asc')) Tăng dần
+            option(value="desc" selected=(humiditySort === 'desc')) Giảm dần
+        .form-group
+          label(for="lightSort") Sắp xếp theo Ánh sáng
+          select#lightSort.form-control(name="lightSort")
+            option(value="none" selected=(lightSort === 'none' || lightSort === undefined)) Không sắp xếp
+            option(value="asc" selected=(lightSort === 'asc')) Tăng dần
+            option(value="desc" selected=(lightSort === 'desc')) Giảm dần
+        .form-group
+          label(for="limitSelect") Số bản ghi mỗi trang
+          select#limitSelect.form-control(name="limit")
+            option(value="10" selected=(limit == 10)) 10
+            option(value="25" selected=(limit == 25)) 25
+            option(value="50" selected=(limit == 50)) 50
+            option(value="100" selected=(limit == 100)) 100
+        .form-group
+          label(for="dateFilter") Chọn ngày
+          input#dateFilter.form-control(type="date", name="dateFilter")
+        button.btn.btn-primary#filterButton(type="submit") Lọc
+      div#tableWrapper
+          include ../partials/weatherTable.pug
 
     script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
     script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
     script(src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js")
-    script(src="/js/history2.js") 
+    script(src="/js/history2.js")

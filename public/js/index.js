@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
   const ctx = document.getElementById('myChart').getContext('2d');
-  
-  // Lấy các phần tử hiển thị giá trị nhiệt độ, độ ẩm và ánh sáng
   const tempElement = document.getElementById('text-temp');
   const humidElement = document.getElementById('text-humid');
   const lightElement = document.getElementById('text-light');
@@ -9,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const tempIcon = document.querySelector('#card-temp i');
   const humidIcon = document.querySelector('#card-humid i');
   const lightIcon = document.querySelector('#card-light i');
-  // Dữ liệu ban đầu
   let temperatureData = [22, 24, 19, 23, 25, 27, 30];
   let humidityData = [60, 65, 55, 70, 75, 80, 85];
   let lightData = [100, 200, 150, 300, 350, 400, 450];

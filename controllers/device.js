@@ -13,32 +13,151 @@ module.exports.index = async (req, res) => {
         )
 }
 module.exports.saveSensorData = async (temperature, humidity, light) => {
-  try {
-      const newData = new Weather({
-          temperature,
-          humidity,
-          light,
-      });
-      await newData.save()
-      console.log('Dữ liệu cảm biến đã được lưu');
-  } catch (error) {
-      console.error('Lỗi khi lưu dữ liệu cảm biến:', error);
-  }
+    try {
+        const currentDate = new Date();
+        const Day = currentDate.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const Hour = currentDate.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  
+        const newData = new Weather({
+            temperature,
+            humidity,
+            light,
+            Day,  
+            Hour  
+        });
+        
+        await newData.save();
+        console.log('Dữ liệu cảm biến đã được lưu');
+    } catch (error) {
+        console.error('Lỗi khi lưu dữ liệu cảm biến:', error);
+    }
+  };
+  
+ module.exports.history2 = async (req, res) => {
+    let page = parseInt(req.query.page) || 1;
+    let limit = parseInt(req.query.limit) || 10;
+    let temperatureSort = req.query.temperatureSort || 'none';
+    let humiditySort = req.query.humiditySort || 'none';
+    let lightSort = req.query.lightSort || 'none';
+    let dateFilter = req.query.dateFilter;
+    let skip = (page - 1) * limit;
+    let query = {};
+
+    if (dateFilter) {
+        let startOfDay = new Date(dateFilter);
+        startOfDay.setHours(0, 0, 0, 0);
+        let endOfDay = new Date(dateFilter);
+        endOfDay.setHours(23, 59, 59, 999);
+        query.createdAt = { $gte: startOfDay, $lte: endOfDay };
+    }
+
+    let totalRecords = await Weather.countDocuments(query);
+
+    let sortQuery = {};
+    if (temperatureSort !== 'none') {
+        sortQuery.temperature = temperatureSort === 'asc' ? 1 : -1;
+    }
+    if (humiditySort !== 'none') {
+        sortQuery.humidity = humiditySort === 'asc' ? 1 : -1;
+    }
+    if (lightSort !== 'none') {
+        sortQuery.light = lightSort === 'asc' ? 1 : -1;
+    }
+
+    let records = await Weather.find(query)
+        .sort(sortQuery)
+        .skip(skip)
+        .limit(limit);
+
+    res.render("../views/history2.pug", {
+        records: records,
+        temperatureSort: temperatureSort,
+        humiditySort: humiditySort,
+        lightSort: lightSort,
+        currentPage: page,
+        totalPages: Math.ceil(totalRecords / limit),
+        limit: limit,
+        dateFilter: dateFilter  
+    });
 };
 module.exports.history2 = async (req, res) => {
-    const records = await Weather.find()
-      res.render("../views/history2.pug", {
-            records : records,
-      })
-}
+    let page = parseInt(req.query.page) || 1;
+    let limit = parseInt(req.query.limit) || 10; 
+    let temperatureSort = req.query.temperatureSort || 'none';
+    let humiditySort = req.query.humiditySort || 'none';
+    let lightSort = req.query.lightSort || 'none';
+    let dateFilter = req.query.dateFilter;
+    let skip = (page - 1) * limit;
+    let query = {}; 
+    if (dateFilter) {
+        let startOfDay = new Date(dateFilter);
+        startOfDay.setHours(0, 0, 0, 0);
+        let endOfDay = new Date(dateFilter);
+        endOfDay.setHours(23, 59, 59, 999);
+        query.createdAt = { $gte: startOfDay, $lte: endOfDay };
+    }
+    let totalRecords = await Weather.countDocuments(query);;
+    let sortQuery = {};
+    if (temperatureSort !== 'none') {
+        sortQuery.temperature = temperatureSort === 'asc' ? 1 : -1;
+    }
+    if (humiditySort !== 'none') {
+        sortQuery.humidity = humiditySort === 'asc' ? 1 : -1;
+    }
+    if (lightSort !== 'none') {
+        sortQuery.light = lightSort === 'asc' ? 1 : -1;
+    }
+
+    let records = await Weather.find(query)
+        .sort(sortQuery)
+        .skip(skip) 
+        .limit(limit); 
+    let totalPages = Math.ceil(totalRecords / limit);
+    res.render("../views/history2.pug", {
+        records: records,
+        temperatureSort: temperatureSort,
+        humiditySort: humiditySort,
+        lightSort: lightSort,
+        currentPage: page,
+        totalPages: totalPages,
+        limit: limit,
+        dateFilter: dateFilter  
+    });
+};
+function paginationRange(currentPage, totalPages, delta = 2) {
+    const range = [];
+    const rangeWithDots = [];
+    let l;
+  
+    for (let i = 1; i <= totalPages; i++) {
+      if (i === 1 || i === totalPages || (i >= currentPage - delta && i <= currentPage + delta)) {
+        range.push(i);
+      }
+    }
+  
+    range.forEach((i) => {
+      if (l) {
+        if (i - l === 2) {
+          rangeWithDots.push(l + 1);
+        } else if (i - l !== 1) {
+          rangeWithDots.push('...');
+        }
+      }
+      rangeWithDots.push(i);
+      l = i;
+    });
+  
+    return rangeWithDots;
+  }
 module.exports.history1 = async (req, res) => {
     let filter = req.query.deviceFilter || 'all';
     let page = parseInt(req.query.page) || 1;
     let limit = parseInt(req.query.limit) || 10;
     let sortOrder = req.query.sortOrder || 'asc';
-    let dateFilter = req.query.dateFilter;  
+    let dateFilter = req.query.dateFilter;
     let skip = (page - 1) * limit;
     let query = {};
+
     if (filter !== 'all') {
         query.Name = filter;
     }
@@ -58,23 +177,15 @@ module.exports.history1 = async (req, res) => {
                              .skip(skip)
                              .limit(limit);
 
-    data.forEach(item => {
-        const date = new Date(item.createdAt);
-        item.DateandHour = date.toLocaleDateString('vi-VN', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        }) + ' ' + date.toLocaleTimeString('vi-VN', {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        });
-    });
+    const totalPages = Math.ceil(totalRecords / limit);
+    const pagination = paginationRange(page, totalPages);
+
     res.render("../views/history1.pug", {
         data: data,
         deviceFilter: filter,
         currentPage: page,
-        totalPages: Math.ceil(totalRecords / limit),
+        totalPages: totalPages,
+        pagination: pagination,
         limit: limit,
         sortOrder: sortOrder,
         dateFilter: dateFilter  
@@ -95,7 +206,6 @@ module.exports.changeStatus = async (req, res) => {
         Day: day,         
         Hour: hour        
     });
-    console.log(id)
     if (id === "66d6bb0cef816034999be0f6") {
         const mqttMessage = TT === "on" ? "1:1" : "1:0";
         mqttService.publishMessage('home/device/control', mqttMessage);
