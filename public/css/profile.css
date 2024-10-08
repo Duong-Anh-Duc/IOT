@@ -2,6 +2,8 @@ body {
   display: flex;
   flex-direction: column;
   margin: 0;
+  background-color: #f8f9fa;
+  font-family: 'Arial', sans-serif;
 }
 .container-fluid {
   padding: 20px;
@@ -11,41 +13,48 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 800px;
+  max-width: 600px;
   margin: 0 auto;
   margin-top: 100px; 
 }
 .card {
-  width: 400px;
+  width: 100%;
+  padding: 30px;
   margin-bottom: 30px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 15px;
+  background-color: #ffffff;
 }
 #profile-img {
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  border: 3px solid #007bff;
 }
-.info-item {
-  font-size: 16px;
-  margin-bottom: 5px;
+h2 {
+  font-size: 1.8rem;
   color: #333;
 }
-.upload-container.text-center {
+h4 {
+  font-size: 1.2rem;
+  color: #666;
+}
+.upload-container.text-center, .link-container.text-center {
   margin-bottom: 30px;
 }
-.link-container.text-center {
-  margin-bottom: 30px;
-}
-h3 {
+.upload-container.text-center h3, .link-container.text-center h3 {
   font-size: 1.5rem;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 button.btn {
   margin-top: 10px;
+  padding: 10px 20px;
 }
 a.btn-outline-primary {
   display: inline-block;
   margin-top: 10px;
+  padding: 10px 20px;
 }

@@ -43,7 +43,7 @@ html(lang="en")
             option(value="100" selected=(limit == 100)) 100
         .form-group
           label(for="dateFilter") Chọn ngày
-          input#dateFilter.form-control(type="date", name="dateFilter")
+          input#dateFilter.form-control(type="date", name="dateFilter", value=(dateFilter || ''))
         button.btn.btn-primary#filterButton(type="submit") Lọc
       div#tableWrapper
           include ../partials/weatherTable.pug

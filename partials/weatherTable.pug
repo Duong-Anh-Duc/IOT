@@ -28,7 +28,7 @@ if totalPages > 1
           span.page-link &laquo;
         li.page-item.disabled
           span.page-link Trang Trước
-      
+
       each page in pagination
         if page === '...'
           li.page-item.disabled
@@ -39,7 +39,7 @@ if totalPages > 1
         else
           li.page-item
             a.page-link(href=`?page=${page}&limit=${limit}`) #{page}
-      
+
       if currentPage < totalPages
         li.page-item
           a.page-link(href=`?page=${currentPage + 1}&limit=${limit}`) Trang Sau
