@@ -12,6 +12,27 @@ module.exports.index = async (req, res) => {
         }
         )
 }
+module.exports.getSensorData = async (req, res) => {
+    try {
+        const latestData = await Weather.findOne().sort({ createdAt: -1 });
+        if (latestData) {
+            res.json({
+                success: true,
+                temperature: latestData.temperature,
+                humidity: latestData.humidity,
+                light: latestData.light
+            });
+        } else {
+            res.json({
+                success: false,
+                message: 'No sensor data available'
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching sensor data:', error);
+        res.status(500).json({ success: false, message: 'Error fetching sensor data' });
+    }
+};
 module.exports.saveSensorData = async (temperature, humidity, light) => {
     try {
         const currentDate = new Date();
@@ -33,7 +54,7 @@ module.exports.saveSensorData = async (temperature, humidity, light) => {
     }
   };
   
- module.exports.history2 = async (req, res) => {
+  module.exports.history2 = async (req, res) => {
     let page = parseInt(req.query.page) || 1;
     let limit = parseInt(req.query.limit) || 10;
     let temperatureSort = req.query.temperatureSort || 'none';
@@ -69,50 +90,9 @@ module.exports.saveSensorData = async (temperature, humidity, light) => {
         .skip(skip)
         .limit(limit);
 
-    res.render("../views/history2.pug", {
-        records: records,
-        temperatureSort: temperatureSort,
-        humiditySort: humiditySort,
-        lightSort: lightSort,
-        currentPage: page,
-        totalPages: Math.ceil(totalRecords / limit),
-        limit: limit,
-        dateFilter: dateFilter  
-    });
-};
-module.exports.history2 = async (req, res) => {
-    let page = parseInt(req.query.page) || 1;
-    let limit = parseInt(req.query.limit) || 10; 
-    let temperatureSort = req.query.temperatureSort || 'none';
-    let humiditySort = req.query.humiditySort || 'none';
-    let lightSort = req.query.lightSort || 'none';
-    let dateFilter = req.query.dateFilter;
-    let skip = (page - 1) * limit;
-    let query = {}; 
-    if (dateFilter) {
-        let startOfDay = new Date(dateFilter);
-        startOfDay.setHours(0, 0, 0, 0);
-        let endOfDay = new Date(dateFilter);
-        endOfDay.setHours(23, 59, 59, 999);
-        query.createdAt = { $gte: startOfDay, $lte: endOfDay };
-    }
-    let totalRecords = await Weather.countDocuments(query);;
-    let sortQuery = {};
-    if (temperatureSort !== 'none') {
-        sortQuery.temperature = temperatureSort === 'asc' ? 1 : -1;
-    }
-    if (humiditySort !== 'none') {
-        sortQuery.humidity = humiditySort === 'asc' ? 1 : -1;
-    }
-    if (lightSort !== 'none') {
-        sortQuery.light = lightSort === 'asc' ? 1 : -1;
-    }
+    const totalPages = Math.ceil(totalRecords / limit);
+    const pagination = paginationRange(page, totalPages);
 
-    let records = await Weather.find(query)
-        .sort(sortQuery)
-        .skip(skip) 
-        .limit(limit); 
-    let totalPages = Math.ceil(totalRecords / limit);
     res.render("../views/history2.pug", {
         records: records,
         temperatureSort: temperatureSort,
@@ -120,6 +100,7 @@ module.exports.history2 = async (req, res) => {
         lightSort: lightSort,
         currentPage: page,
         totalPages: totalPages,
+        pagination: pagination,
         limit: limit,
         dateFilter: dateFilter  
     });

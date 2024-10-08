@@ -15,26 +15,38 @@ table#weatherTable.table.table-striped
         td #{record.humidity}%
         td #{record.light} lux
         td #{record.Day} #{record.Hour}
-
 if totalPages > 1
   nav
     ul.pagination
       if currentPage > 1
         li.page-item
+          a.page-link(href=`?page=1&limit=${limit}`) &laquo;  
+        li.page-item
           a.page-link(href=`?page=${currentPage - 1}&limit=${limit}`) Trang Trước
       else
         li.page-item.disabled
+          span.page-link &laquo;
+        li.page-item.disabled
           span.page-link Trang Trước
-      each page in [...Array(totalPages).keys()].map(i => i + 1)
-        if page === currentPage
+      
+      each page in pagination
+        if page === '...'
+          li.page-item.disabled
+            span.page-link ...
+        else if page === currentPage
           li.page-item.active
             span.page-link #{page}
         else
           li.page-item
             a.page-link(href=`?page=${page}&limit=${limit}`) #{page}
+      
       if currentPage < totalPages
         li.page-item
           a.page-link(href=`?page=${currentPage + 1}&limit=${limit}`) Trang Sau
+        li.page-item
+          a.page-link(href=`?page=${totalPages}&limit=${limit}`) &raquo;  
       else
         li.page-item.disabled
           span.page-link Trang Sau
+        li.page-item.disabled
+          span.page-link &raquo;

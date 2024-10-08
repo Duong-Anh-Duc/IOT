@@ -8,4 +8,5 @@ router.get("/History1", controller.history1);
 router.get("/History2", controller.history2);
 router.get("/", controller.index);
 router.post("/change-status/:TT/:id", controller.changeStatus);
+router.get("/sensor-data", controller.getSensorData);
 module.exports = router;
