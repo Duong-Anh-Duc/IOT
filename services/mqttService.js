@@ -1,5 +1,5 @@
-const mqttClient = require("../config/mqttConfig").mqttClient
-const  saveSensorData  = require('../controllers/device').saveSensorData; 
+const mqttClient = require("../config/mqttConfig").mqttClient;
+const  saveSensorData  = require('../controllers/sensorController').saveSensorData; 
 module.exports.publishMessage = (topic, message) => {
     mqttClient.publish(topic, message, (err) => {
       if (err) {

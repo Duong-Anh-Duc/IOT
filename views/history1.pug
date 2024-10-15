@@ -16,7 +16,7 @@ html(lang="en")
         h2 Lịch sử bật tắt thiết bị
         form(action="", method="GET", class="mb-4 form-search d-flex justify-content-between align-items-center", id="filterForm")
           .form-group
-            label(for="deviceFilter") Bộ lọc thiết bị
+            label(for="deviceFilter") Thiết bị
             select#deviceFilter.form-control(name="deviceFilter")
               option(value="all" selected=(deviceFilter === 'all' || deviceFilter === undefined)) Tất cả
               option(value="Đèn" selected=(deviceFilter === 'Đèn')) Đèn
@@ -30,18 +30,39 @@ html(lang="en")
               option(value="50" selected=(limit == 50)) 50
               option(value="100" selected=(limit == 100)) 100
           .form-group
-            label(for="sortOrder") Sắp xếp theo thời gian
+            label(for="sortOrder") Thời gian
             select#sortOrder.form-control(name="sortOrder")
               option(value="asc" selected=(sortOrder === 'asc')) Tăng dần
               option(value="desc" selected=(sortOrder === 'desc')) Giảm dần
           .form-group
-            label(for="dateFilter") Chọn ngày
+            label(for="statusFilter") Trạng thái
+            select#statusFilter.form-control(name="statusFilter")
+              option(value="all" selected=(statusFilter === 'all' || statusFilter === undefined)) Tất cả
+              option(value="on" selected=(statusFilter === 'on')) Bật
+              option(value="off" selected=(statusFilter === 'off')) Tắt
+          .form-group
+            label(for="dateFilter") Ngày
             input#dateFilter.form-control(type="date", name="dateFilter", value=(dateFilter || ''))
+          .form-group
+            label(for="timeFilter") Giờ
+            input#timeFilter.form-control(type="time", name="timeFilter", step="1", value=(timeFilter || '')) 
           button.btn.btn-primary#filterButton(type="submit") Lọc
+
         div#tableWrapper
-          include ../partials/deviceTable.pug
+          table#deviceTable.table.table-striped
+            thead
+              tr
+                th STT
+                th Thiết bị
+                th Trạng thái
+                th Thời điểm
+            tbody
+
+        nav.mt-4
+          ul.pagination.justify-content-center#paginationWrapper
+
+    script(src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js")
     script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
     script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
-    script(src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js")
     script(src="/js/history1.js")

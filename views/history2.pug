@@ -4,11 +4,11 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Lịch sử đo thời tiết
-    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
-    link(rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css")
-    link(rel="stylesheet" href="/css/history2.css") 
-    link(rel="stylesheet" href="/css/footer.css")
-    link(rel="stylesheet" href="/css/header.css")
+    link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+    link(rel="stylesheet", href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css")
+    link(rel="stylesheet", href="/css/history2.css") 
+    link(rel="stylesheet", href="/css/footer.css")
+    link(rel="stylesheet", href="/css/header.css")
   body
     .wrapper
       header
@@ -17,38 +17,56 @@ html(lang="en")
       h2 Lịch sử đo thời tiết
       form(action="", method="GET", class="mb-4 form-search d-flex justify-content-between align-items-center", id="filterForm")
         .form-group
-          label(for="temperatureSort") Sắp xếp theo Nhiệt độ
-          select#temperatureSort.form-control(name="temperatureSort")
-            option(value="none" selected=(temperatureSort === 'none' || temperatureSort === undefined)) Không sắp xếp
-            option(value="asc" selected=(temperatureSort === 'asc')) Tăng dần
-            option(value="desc" selected=(temperatureSort === 'desc')) Giảm dần
+          label(for="sortField") Sắp xếp theo
+          select#sortField.form-control(name="sortField")
+            option(value="none") Không sắp xếp
+            option(value="temperature") Nhiệt độ
+            option(value="humidity") Độ ẩm
+            option(value="light") Ánh sáng
         .form-group
-          label(for="humiditySort") Sắp xếp theo Độ ẩm
-          select#humiditySort.form-control(name="humiditySort")
-            option(value="none" selected=(humiditySort === 'none' || humiditySort === undefined)) Không sắp xếp
-            option(value="asc" selected=(humiditySort === 'asc')) Tăng dần
-            option(value="desc" selected=(humiditySort === 'desc')) Giảm dần
-        .form-group
-          label(for="lightSort") Sắp xếp theo Ánh sáng
-          select#lightSort.form-control(name="lightSort")
-            option(value="none" selected=(lightSort === 'none' || lightSort === undefined)) Không sắp xếp
-            option(value="asc" selected=(lightSort === 'asc')) Tăng dần
-            option(value="desc" selected=(lightSort === 'desc')) Giảm dần
+          label(for="sortOrder") Tiêu chí
+          select#sortOrder.form-control(name="sortOrder")
+            option(value="asc") Tăng dần
+            option(value="desc") Giảm dần
         .form-group
           label(for="limitSelect") Số bản ghi mỗi trang
           select#limitSelect.form-control(name="limit")
-            option(value="10" selected=(limit == 10)) 10
-            option(value="25" selected=(limit == 25)) 25
-            option(value="50" selected=(limit == 50)) 50
-            option(value="100" selected=(limit == 100)) 100
+            option(value="10") 10
+            option(value="25") 25
+            option(value="50") 50
+            option(value="100") 100
         .form-group
           label(for="dateFilter") Chọn ngày
           input#dateFilter.form-control(type="date", name="dateFilter", value=(dateFilter || ''))
         button.btn.btn-primary#filterButton(type="submit") Lọc
       div#tableWrapper
-          include ../partials/weatherTable.pug
+        table#weatherTable.table.table-striped
+          thead
+            tr
+              th STT
+              th Nhiệt độ (°C)
+              th Độ ẩm (%)
+              th Ánh sáng (lux)
+              th Thời điểm đo
+          tbody
+            - if (records && records.length > 0)
+              - var cnt = (currentPage - 1) * limit + 1
+              each record in records
+                tr
+                  td #{cnt++}
+                  td #{record.temperature}°C
+                  td #{record.humidity}%
+                  td #{record.light} lux
+                  td #{record.Day} #{record.Hour}
+            - else
+              tr
+                td(colspan="5") Không có dữ liệu
+
+        nav
+          ul.pagination
 
     script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
     script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
     script(src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js")

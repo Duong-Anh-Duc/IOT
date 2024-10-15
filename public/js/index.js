@@ -8,11 +8,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const humidIcon = document.querySelector('#card-humid i');
   const lightIcon = document.querySelector('#card-light i');
 
-  let temperatureData = [];
-  let humidityData = [];
-  let lightData = [];
-
-  let labelsData = [...Array(10).keys()].map(i => i + 1);
+  let temperatureData = JSON.parse(sessionStorage.getItem('temperatureData')) || [];
+  let humidityData = JSON.parse(sessionStorage.getItem('humidityData')) || [];
+  let lightData = JSON.parse(sessionStorage.getItem('lightData')) || [];
+  let labelsData = [...Array(10).keys()]; 
 
   const myChart = new Chart(ctx, {
       type: 'line', 
@@ -50,25 +49,41 @@ document.addEventListener('DOMContentLoaded', function() {
                       meta.hidden = !meta.hidden;
                       chart.update();
                   }
+              },
+              datalabels: {
+                  color: '#000',
+                  anchor: 'end',
+                  align: 'top',
+                  formatter: function(value) {
+                      return value;
+                  }
               }
           },
           scales: {
+              x: {
+                  display: false 
+              },
               y: {
                   beginAtZero: true
               }
           }
-      }
+      },
+      plugins: [ChartDataLabels] 
   });
+
   async function fetchSensorData() {
     try {
       const response = await axios.get('http://localhost:3000/sensor-data');
-      console.log(response.data)
+      console.log(response.data);
       if (response.data.success) {
         const { temperature, humidity, light } = response.data;
+        
         temperatureData.push(temperature);
         humidityData.push(humidity);
         lightData.push(light);
-
+        
+        labelsData.push(labelsData[labelsData.length - 1] + 1); 
+        labelsData.shift();
         if (temperatureData.length > 10) {
           temperatureData.shift();
           humidityData.shift();
@@ -78,6 +93,12 @@ document.addEventListener('DOMContentLoaded', function() {
         humidElement.textContent = `${humidity}%`;
         lightElement.textContent = `${light} Lux`;
 
+        // Lưu dữ liệu vào sessionStorage
+        sessionStorage.setItem('temperatureData', JSON.stringify(temperatureData));
+        sessionStorage.setItem('humidityData', JSON.stringify(humidityData));
+        sessionStorage.setItem('lightData', JSON.stringify(lightData));
+
+        // Thay đổi icon dựa trên giá trị
         if (temperature < 20) {
           tempIcon.className = 'fas fa-thermometer-quarter'; 
         } else if (temperature >= 20 && temperature <= 30) {
@@ -112,9 +133,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   fetchSensorData();
 
-  setInterval(fetchSensorData, 2000);
+  setInterval(fetchSensorData, 2000); 
 });
-
 const buttonChangeStatus = document.querySelectorAll("[button-change-status]");
 
 if (buttonChangeStatus.length > 0) {

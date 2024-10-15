@@ -47,17 +47,17 @@ tbody tr:hover {
   align-items: center;
   margin-bottom: 20px;
   flex-wrap: nowrap;
-  gap: 10px;
+  gap: 5px; /* Giảm khoảng cách giữa các phần tử */
 }
 
 .form-group {
-  width: 20%;
+  width: 15%; /* Giảm kích thước của các ô lọc */
 }
 
 #filterButton {
   flex-shrink: 0;
   width: 80px;
-  margin-top: 8px; 
+  margin-top: 8px;
 }
 
 @media (max-width: 768px) {
