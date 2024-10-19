@@ -7,7 +7,8 @@ module.exports.getSensorData = async (req, res) => {
                 success: true,
                 temperature: latestData.temperature,
                 humidity: latestData.humidity,
-                light: latestData.light
+                light: latestData.light,
+                windSpeed: latestData.windSpeed 
             });
         } else {
             res.json({ success: false, message: 'No sensor data available' });
@@ -17,18 +18,18 @@ module.exports.getSensorData = async (req, res) => {
         res.status(500).json({ success: false, message: 'Error fetching sensor data' });
     }
 };
-module.exports.saveSensorData = async (temperature, humidity, light) => {
+module.exports.saveSensorData = async (temperature, humidity, light, windSpeed) => {
     try {
         const currentDate = new Date();
-        const Day = currentDate.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        const Hour = currentDate.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
+        const day = currentDate.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const hour = currentDate.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         const newData = new Weather({
             temperature,
             humidity,
             light,
-            Day,
-            Hour
+            windSpeed, 
+            day,
+            hour
         });
 
         await newData.save();
@@ -37,3 +38,4 @@ module.exports.saveSensorData = async (temperature, humidity, light) => {
         console.error('Lỗi khi lưu dữ liệu cảm biến:', error);
     }
 };
+

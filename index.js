@@ -1,10 +1,11 @@
 const express = require("express");
 const methodOverride = require("method-override");
-
+require("dotenv").config()
 const app = express();
 const port = 3000;
 const {subscribeToTopic} = require("./services/mqttService")
 //subscribeToTopic("home/sensor")
+app.use(express.json())
 app.use(methodOverride('_method'));
 app.use(express.static('public'));
 app.set('views', './views');

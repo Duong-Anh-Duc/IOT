@@ -5,69 +5,56 @@ html(lang="en")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Lịch sử đo thời tiết
     link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
-    link(rel="stylesheet", href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css")
     link(rel="stylesheet", href="/css/history2.css") 
     link(rel="stylesheet", href="/css/footer.css")
     link(rel="stylesheet", href="/css/header.css")
   body
-    .wrapper
-      header
-        include ./header/header.pug
-    .container.mt-5
-      h2 Lịch sử đo thời tiết
-      form(action="", method="GET", class="mb-4 form-search d-flex justify-content-between align-items-center", id="filterForm")
-        .form-group
-          label(for="sortField") Sắp xếp theo
-          select#sortField.form-control(name="sortField")
-            option(value="none") Không sắp xếp
-            option(value="temperature") Nhiệt độ
-            option(value="humidity") Độ ẩm
-            option(value="light") Ánh sáng
-        .form-group
-          label(for="sortOrder") Tiêu chí
-          select#sortOrder.form-control(name="sortOrder")
-            option(value="asc") Tăng dần
-            option(value="desc") Giảm dần
-        .form-group
-          label(for="limitSelect") Số bản ghi mỗi trang
-          select#limitSelect.form-control(name="limit")
-            option(value="10") 10
-            option(value="25") 25
-            option(value="50") 50
-            option(value="100") 100
-        .form-group
-          label(for="dateFilter") Chọn ngày
-          input#dateFilter.form-control(type="date", name="dateFilter", value=(dateFilter || ''))
-        button.btn.btn-primary#filterButton(type="submit") Lọc
-      div#tableWrapper
-        table#weatherTable.table.table-striped
-          thead
-            tr
-              th STT
-              th Nhiệt độ (°C)
-              th Độ ẩm (%)
-              th Ánh sáng (lux)
-              th Thời điểm đo
-          tbody
-            - if (records && records.length > 0)
-              - var cnt = (currentPage - 1) * limit + 1
-              each record in records
-                tr
-                  td #{cnt++}
-                  td #{record.temperature}°C
-                  td #{record.humidity}%
-                  td #{record.light} lux
-                  td #{record.Day} #{record.Hour}
-            - else
+    include ./header/header.pug
+    main#content.wrapper
+      .container.mt-5
+        h2 Lịch sử đo thời tiết
+        form(action="", method="GET", class="mb-4 form-search d-flex justify-content-between align-items-center", id="filterForm")
+          .form-group
+            label(for="sortField") Sắp xếp theo
+            select#sortField.form-control(name="sortField")
+              option(value="none") Không sắp xếp
+              option(value="temperature") Nhiệt độ
+              option(value="humidity") Độ ẩm
+              option(value="light") Ánh sáng
+          .form-group
+            label(for="sortOrder") Tiêu chí
+            select#sortOrder.form-control(name="sortOrder")
+              option(value="asc") Tăng dần
+              option(value="desc") Giảm dần
+          .form-group
+            label(for="limitSelect") Số bản ghi mỗi trang
+            select#limitSelect.form-control(name="limit")
+              option(value="10") 10
+              option(value="25") 25
+              option(value="50") 50
+              option(value="100") 100
+          .form-group
+            label(for="dateFilter") Chọn ngày
+            input#dateFilter.form-control(type="date", name="dateFilter")
+          .form-group
+            label(for="timeFilter") Giờ
+            input#timeFilter.form-control(type="time", name="timeFilter", step="1")
+          button.btn.btn-primary#filterButton(type="submit") Lọc
+        div#tableWrapper
+          table#weatherTable.table.table-striped
+            thead
               tr
-                td(colspan="5") Không có dữ liệu
-
+                th STT
+                th Nhiệt độ (°C)
+                th Độ ẩm (%)
+                th Ánh sáng (lux)
+                th Thời điểm đo
+            tbody
         nav
           ul.pagination
-
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js")
     script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
     script(src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
     script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
-    script(src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js")
     script(src="/js/history2.js")

@@ -1,5 +1,4 @@
 const History = require("../models/historyModel");
-const Weather = require("../models/weatherModel");
 const paginationRangeHelper = require("../helpers/paginationRange");
 
 module.exports.deviceData = async (req, res) => {
@@ -13,11 +12,11 @@ module.exports.deviceData = async (req, res) => {
     let skip = (page - 1) * limit;
     let query = {};
     if (filter !== 'all') {
-        query.Name = filter;
+        query.name = filter;
     }
 
     if (statusFilter !== 'all') {
-        query.TT = statusFilter;
+        query.status = statusFilter;
     }
     if (dateFilter) {
         let startDateTime = new Date(`${dateFilter}T${timeFilter}`);

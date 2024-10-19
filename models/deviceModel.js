@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 
 const DeviceSchema = new mongoose.Schema({
-    Id: {
+    stt: {
         type: Number,
     },
-    Name: {
+    name: {
         type: String,
         required: true,
     },
-    TT: {
+    status: {
         type: String,
         required: true,
     }

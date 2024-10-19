@@ -1,21 +1,22 @@
 const Weather = require("../models/weatherModel");
 const paginationRangeHelper = require("../helpers/paginationRange");
-
 module.exports.weatherData = async (req, res) => {
     let page = parseInt(req.query.page) || 1;
     let limit = parseInt(req.query.limit) || 10;
     let sortField = req.query.sortField || 'none';
     let sortOrder = req.query.sortOrder || 'asc';
     let dateFilter = req.query.dateFilter;
+    let timeFilter = req.query.timeFilter || '00:00:00';
+
     let skip = (page - 1) * limit;
     let query = {};
 
     if (dateFilter) {
-        let startOfDay = new Date(dateFilter);
-        startOfDay.setHours(0, 0, 0, 0);
-        let endOfDay = new Date(dateFilter);
-        endOfDay.setHours(23, 59, 59, 999);
-        query.createdAt = { $gte: startOfDay, $lte: endOfDay };
+        let startDateTime = new Date(`${dateFilter}T${timeFilter}`);
+        let endDateTime = new Date(startDateTime);
+        endDateTime.setSeconds(endDateTime.getSeconds() + 1);
+
+        query.createdAt = { $gte: startDateTime, $lt: endDateTime }; 
     }
 
     try {
@@ -43,7 +44,8 @@ module.exports.weatherData = async (req, res) => {
             limit: limit,
             sortField: sortField,
             sortOrder: sortOrder,
-            dateFilter: dateFilter
+            dateFilter: dateFilter,
+            timeFilter: timeFilter
         });
     } catch (error) {
         res.status(500).json({
@@ -52,7 +54,7 @@ module.exports.weatherData = async (req, res) => {
             error: error.message
         });
     }
-};
+}
 module.exports.weatherPage = (req, res) => {
     res.render("../views/history2.pug");
 };

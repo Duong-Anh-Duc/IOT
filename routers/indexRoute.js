@@ -9,11 +9,11 @@ router.get("/profile", (req, res) => {
     res.render("profile.pug");
 });
 router.get("/devicePage", historyDeviceController.devicePage);
-router.get("/deviceData", historyDeviceController.deviceData);
+router.get("/api/deviceData", historyDeviceController.deviceData);
 router.get("/weatherPage", historySensorController.weatherPage);
-router.get("/weatherData", historySensorController.weatherData);
+router.get("/api/weatherData", historySensorController.weatherData);
 router.get("/", deviceController.index);
-router.post("/change-status/:TT/:id", deviceController.changeStatus);
+router.post("/api/change-status", deviceController.changeStatus);
 router.get("/sensor-data", sensorController.getSensorData);
 router.post('/upload-avatar', uploadAvatar);
 

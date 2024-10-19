@@ -33,7 +33,7 @@ const loadData = async (page = 1, updateUrl = true) => {
     }
 
     try {
-        const response = await axios.get(`/deviceData?${params}`);
+        const response = await axios.get(`/api/deviceData?${params}`);
         const { data, currentPage, totalPages, limit } = response.data;
 
         deviceHistoryTableBody.innerHTML = '';
@@ -43,9 +43,9 @@ const loadData = async (page = 1, updateUrl = true) => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${stt}</td>
-                <td>${item.Name}</td>
-                <td>${item.TT === 'on' ? 'Bật' : 'Tắt'}</td>
-                <td>${item.Day} ${item.Hour}</td>
+                <td>${item.name}</td>
+                <td>${item.status === 'on' ? 'Bật' : 'Tắt'}</td>
+                <td>${item.day} ${item.hour}</td>
             `;
             deviceHistoryTableBody.appendChild(row);
         });
@@ -156,3 +156,22 @@ const getPaginationRange = (currentPage, totalPages, delta = 2) => {
 
     return rangeWithDots;
 };
+document.addEventListener('DOMContentLoaded', function() {
+    const links = document.querySelectorAll('.nav-link'); 
+  
+    links.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault(); 
+  
+        const href = this.getAttribute('href');
+        document.querySelector('body').classList.add('fade-out'); 
+  
+        setTimeout(() => {
+          window.location.href = href; 
+        }, 500);
+      });
+    });
+  
+    document.body.classList.add('fade-in');
+  });
+  

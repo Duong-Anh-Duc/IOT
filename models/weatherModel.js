@@ -12,10 +12,14 @@ const WeatherSchema = new mongoose.Schema({
         type: Number,  
         required: true  
     },
-    Day : {
+    windSpeed : {
+        type : Number,
+        required: true
+    },
+    day : {
         type : String
     },
-    Hour : {
+    hour : {
         type : String
     }
     

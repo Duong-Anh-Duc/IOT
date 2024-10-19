@@ -47,11 +47,11 @@ tbody tr:hover {
   align-items: center;
   margin-bottom: 20px;
   flex-wrap: nowrap;
-  gap: 5px; /* Giảm khoảng cách giữa các phần tử */
+  gap: 5px;
 }
 
 .form-group {
-  width: 15%; /* Giảm kích thước của các ô lọc */
+  width: 15%; 
 }
 
 #filterButton {

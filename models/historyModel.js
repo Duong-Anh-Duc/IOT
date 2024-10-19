@@ -1,18 +1,18 @@
 const mongoose = require("mongoose");
 
 const HistorySchema = new mongoose.Schema({
-    Name: {
+    name: {
         type: String,
         required: true,
     },
-    TT: {
+    status: {
         type: String,
         required: true,
     },
-    Day : {
+    day : {
         type : String,
     },
-    Hour : {
+    hour : {
         type : String
     }
 },
