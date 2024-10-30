@@ -1,12 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const deviceFilter = document.getElementById('deviceFilter');
-    const statusFilter = document.getElementById('statusFilter');
+    const temperatureInput = document.getElementById('temperature');
+    const humidityInput = document.getElementById('humidity');
+    const lightInput = document.getElementById('light');
+    const windSpeedInput = document.getElementById('windSpeed');
     const dateTimeFilterInput = document.getElementById('dateTimeFilter');
     const limitSelect = document.getElementById('limitSelect');
-    const deviceHistoryTableBody = document.getElementById('deviceTable')?.getElementsByTagName('tbody')[0];
+    const sensorTableBody = document.getElementById('sensorTable')?.getElementsByTagName('tbody')[0];
 
-
-    if (!deviceFilter || !statusFilter || !dateTimeFilterInput || !limitSelect || !deviceHistoryTableBody) {
+    if (!temperatureInput || !humidityInput || !lightInput || !windSpeedInput || !dateTimeFilterInput || !limitSelect || !sensorTableBody) {
         console.error("One or more elements are missing in the DOM.");
         return;
     }
@@ -15,82 +16,91 @@ document.addEventListener('DOMContentLoaded', function () {
     const initialPage = urlParams.get('page') || 1;
     loadData(initialPage, false);
 
-    // Sự kiện change cho các bộ lọc
-    deviceFilter.addEventListener('change', () => loadData(1, true));
-    statusFilter.addEventListener('change', () => loadData(1, true));
-    dateTimeFilterInput.addEventListener('input', () => loadData(1, true));
-    limitSelect.addEventListener('change', () => loadData(1, true));
+    [temperatureInput, humidityInput, lightInput, windSpeedInput, dateTimeFilterInput, limitSelect].forEach(input => {
+        input.addEventListener('input', () => loadData(1, true));
+    });
 });
 
+const sortTable = (column, order) => {
+    loadData(1, true, column, order);
+};
 
-const loadData = async (page = 1, updateUrl = true, sortColumn = 'createdAt', sortOrder = 'asc') => {
-    const deviceFilter = document.getElementById('deviceFilter');
-    const statusFilter = document.getElementById('statusFilter');
+const loadData = async (page = 1, shouldUpdateUrl = true, sortColumn = null, sortOrder = null) => {
+    const temperatureInput = document.getElementById('temperature');
+    const humidityInput = document.getElementById('humidity');
+    const lightInput = document.getElementById('light');
+    const windSpeedInput = document.getElementById('windSpeed');
     const dateTimeFilterInput = document.getElementById('dateTimeFilter');
     const limitSelect = document.getElementById('limitSelect');
-    const deviceHistoryTableBody = document.getElementById('deviceTable')?.getElementsByTagName('tbody')[0];
+    const sensorTableBody = document.getElementById('sensorTable')?.getElementsByTagName('tbody')[0];
 
-    if (!deviceHistoryTableBody) {
-        console.error("Element 'deviceTable' or 'tbody' is missing.");
+    if (!sensorTableBody) {
+        console.error("Element 'sensorTable' or 'tbody' is missing.");
         return;
     }
 
     const params = new URLSearchParams({
-        deviceFilter: deviceFilter?.value || '',
-        statusFilter: statusFilter?.value || '',
-        dateTimeFilter: dateTimeFilterInput?.value || '',
+        temperature: temperatureInput.value,
+        humidity: humidityInput.value,
+        light: lightInput.value,
+        windSpeed: windSpeedInput.value,
+        dateTimeFilter: dateTimeFilterInput.value,
         page,
-        limit: limitSelect?.value || '10',
+        limit: limitSelect.value,
         sortColumn,
         sortOrder
     }).toString();
 
-    if (updateUrl) {
-        const newUrl = `${window.location.pathname}?${params}`;
-        history.pushState(null, '', newUrl);
-    }
-
     try {
-        const response = await axios.get(`/api/deviceData?${params}`);
-        const { data, currentPage, totalPages, limit } = response.data;
+        const response = await axios.get(`/api/weatherData?${params}`);
+        const { records, currentPage, totalPages, limit } = response.data;
 
-        deviceHistoryTableBody.innerHTML = '';
+        if (shouldUpdateUrl) {
+            const newUrl = `${window.location.pathname}?${params}`;
+            history.pushState(null, '', newUrl);
+        }
 
-        data.forEach((item, index) => {
-            const stt = (currentPage - 1) * limit + index + 1;
+        sensorTableBody.innerHTML = '';
+
+        records.forEach((record, index) => {
             const row = document.createElement('tr');
+            const stt = (currentPage - 1) * limit + index + 1;
             row.innerHTML = `
                 <td>${stt}</td>
-                <td>${item.name}</td>
-                <td>${item.status === 'on' ? 'Bật' : 'Tắt'}</td>
-                <td>${item.day} ${item.hour}</td>
+                <td>${record.temperature}°C</td>
+                <td>${record.humidity}%</td>
+                <td>${record.light} lux</td>
+                <td>${record.windSpeed} m/s</td>
+                <td>${record.day} ${record.hour}</td>
             `;
-            deviceHistoryTableBody.appendChild(row);
+            sensorTableBody.appendChild(row);
         });
 
-        updatePagination(currentPage, totalPages);
+        updatePagination(currentPage, totalPages, limit);
 
     } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching weather data:', error);
     }
 };
 
-
-
-
 const updatePagination = (currentPage, totalPages) => {
-    const paginationWrapper = document.getElementById('paginationWrapper');
+    const paginationWrapper = document.querySelector('.pagination');
+
+    if (!paginationWrapper) {
+        console.error('Không tìm thấy phần tử phân trang (.pagination)');
+        return;
+    }
+
     paginationWrapper.innerHTML = '';
 
     if (totalPages <= 1) return;
-
     if (currentPage > 1) {
         const firstLi = document.createElement('li');
         firstLi.classList.add('page-item');
-        firstLi.innerHTML = `<a class="page-link" href="#">&laquo;</a>`;
+        firstLi.innerHTML = `<a class="page-link" href="#">«</a>`;
         firstLi.addEventListener('click', (e) => {
-            e.preventDefault();
-            loadData(1);
+            e.preventDefault(); 
+            loadData(1); 
         });
         paginationWrapper.appendChild(firstLi);
     }
@@ -100,12 +110,11 @@ const updatePagination = (currentPage, totalPages) => {
         prevLi.classList.add('page-item');
         prevLi.innerHTML = `<a class="page-link" href="#">Trang Trước</a>`;
         prevLi.addEventListener('click', (e) => {
-            e.preventDefault();
-            loadData(currentPage - 1);
+            e.preventDefault(); 
+            loadData(currentPage - 1); 
         });
         paginationWrapper.appendChild(prevLi);
     }
-
     const paginationRange = getPaginationRange(currentPage, totalPages);
     paginationRange.forEach(page => {
         const li = document.createElement('li');
@@ -121,21 +130,20 @@ const updatePagination = (currentPage, totalPages) => {
             } else {
                 li.innerHTML = `<a class="page-link" href="#">${page}</a>`;
                 li.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    loadData(page);
+                    e.preventDefault(); 
+                    loadData(page); 
                 });
             }
         }
 
         paginationWrapper.appendChild(li);
     });
-
     if (currentPage < totalPages) {
         const nextLi = document.createElement('li');
         nextLi.classList.add('page-item');
         nextLi.innerHTML = `<a class="page-link" href="#">Trang Sau</a>`;
         nextLi.addEventListener('click', (e) => {
-            e.preventDefault();
+            e.preventDefault(); 
             loadData(currentPage + 1);
         });
         paginationWrapper.appendChild(nextLi);
@@ -144,15 +152,14 @@ const updatePagination = (currentPage, totalPages) => {
     if (currentPage < totalPages) {
         const lastLi = document.createElement('li');
         lastLi.classList.add('page-item');
-        lastLi.innerHTML = `<a class="page-link" href="#">&raquo;</a>`;
+        lastLi.innerHTML = `<a class="page-link" href="#">»</a>`;
         lastLi.addEventListener('click', (e) => {
-            e.preventDefault();
+            e.preventDefault(); 
             loadData(totalPages);
         });
         paginationWrapper.appendChild(lastLi);
     }
 };
-
 const getPaginationRange = (currentPage, totalPages, delta = 2) => {
     const range = [];
     const rangeWithDots = [];

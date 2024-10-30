@@ -73,3 +73,37 @@ tbody tr:hover {
     width: 100%;
   }
 }
+.d-flex.justify-content-between.align-items-center.mt-4 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.form-group.mb-0 {
+  margin-bottom: 0;
+}
+
+#limitSelect {
+  width: 100px; /* Cố định chiều rộng cho phần chọn số bản ghi */
+  margin-left: auto; /* Đẩy phần chọn số bản ghi sang bên phải */
+}
+
+.form-search {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: nowrap;
+  gap: 5px;
+}
+
+.no-spin::-webkit-outer-spin-button,
+.no-spin::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.no-spin {
+    -moz-appearance: textfield; /* Ẩn nút tăng giảm trong Firefox */
+}

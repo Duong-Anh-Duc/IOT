@@ -179,12 +179,12 @@ canvas {
 
 @keyframes blink-animation {
   0% {
-      background: linear-gradient(120deg, #74ebd5, #acb6e5);
+      background: linear-gradient(135deg, white, white); /* Màu bình thường của card-wind */
   }
   50% {
-      background: linear-gradient(120deg, rgba(255, 0, 0, 0.5), rgba(255, 0, 0, 0.5));
+      background: linear-gradient(135deg, rgba(255, 0, 0, 0.5), rgba(255, 0, 0, 0.5)); /* Màu đỏ nhấp nháy */
   }
   100% {
-      background: linear-gradient(120deg, #74ebd5, #acb6e5);
+      background: linear-gradient(135deg, white, white); /* Màu bình thường của card-wind */
   }
 }

@@ -1,60 +1,157 @@
+/* General styling */
 body {
-  display: flex;
-  flex-direction: column;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f6f9;
   margin: 0;
-  background-color: #f8f9fa;
-  font-family: 'Arial', sans-serif;
+  padding: 0;
 }
+
 .container-fluid {
   padding: 20px;
 }
-.main.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 600px;
-  margin: 0 auto;
-  margin-top: 100px; 
+
+/* Profile card */
+.profile-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 500px;
+  margin: 20px auto;
 }
-.card {
-  width: 100%;
-  padding: 30px;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border: none;
-  border-radius: 15px;
-  background-color: #ffffff;
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 20px;
 }
-#profile-img {
-  width: 120px;
-  height: 120px;
+
+.profile-image {
   border-radius: 50%;
+  width: 130px;
+  height: 130px;
   object-fit: cover;
-  margin-bottom: 20px;
-  border: 3px solid #007bff;
+  border: 5px solid #f0f0f0;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
+
+.profile-image:hover {
+  transform: scale(1.05);
+}
+
 h2 {
-  font-size: 1.8rem;
+  margin: 15px 0 5px;
   color: #333;
+  font-size: 24px;
 }
+
 h4 {
-  font-size: 1.2rem;
-  color: #666;
+  margin: 0;
+  font-size: 16px;
+  color: #777;
 }
-.upload-container.text-center, .link-container.text-center {
-  margin-bottom: 30px;
+
+hr {
+  border: none;
+  border-top: 1px solid #f0f0f0;
+  margin: 20px 0;
 }
-.upload-container.text-center h3, .link-container.text-center h3 {
-  font-size: 1.5rem;
+
+/* Upload Container */
+.profile-upload-container {
+  text-align: center;
   margin-bottom: 20px;
 }
-button.btn {
-  margin-top: 10px;
-  padding: 10px 20px;
+
+.profile-upload-container h3 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 10px;
 }
-a.btn-outline-primary {
-  display: inline-block;
-  margin-top: 10px;
+
+button.btn-primary {
+  background-color: #1890ff;
+  border-color: #1890ff;
   padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+button.btn-primary:hover {
+  background-color: #40a9ff;
+  border-color: #40a9ff;
+}
+
+/* Links */
+.profile-link-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+a.btn-link {
+  color: #1890ff;
+  font-size: 16px;
+  text-decoration: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+a.btn-link:hover {
+  background-color: #f0f0f0;
+  color: #40a9ff;
+}
+
+/* Social Media Links */
+.profile-social-links a {
+  margin: 0 10px;
+  font-size: 24px;
+  color: #1890ff;
+  transition: all 0.3s ease;
+}
+
+.profile-social-links a:hover {
+  color: #40a9ff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profile-card {
+      padding: 15px;
+  }
+
+  .profile-image {
+      width: 100px;
+      height: 100px;
+  }
+
+  h2 {
+      font-size: 20px;
+  }
+
+  h4 {
+      font-size: 14px;
+  }
+
+  button.btn-primary {
+      font-size: 14px;
+  }
+}
+/* Center the social media icons */
+.profile-social-links {
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* Add some space between the icons */
+  margin-top: 20px;
+}
+
+.profile-social-links a {
+  font-size: 24px;
+  color: #1890ff;
+  transition: all 0.3s ease;
+}
+
+.profile-social-links a:hover {
+  color: #40a9ff;
 }

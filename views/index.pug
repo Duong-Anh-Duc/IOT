@@ -3,7 +3,7 @@ html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title Bảng điều khiển IoT
+    title DashBoard
     link(rel="stylesheet", href="/css/index.css")
     link(rel="stylesheet", href="/css/footer.css")
     link(rel="stylesheet", href="/css/header.css")
@@ -17,21 +17,21 @@ html(lang="en")
           .card#card-temp.card-temp
             .card-body.text-center
               h3
-                i.fas.fa-thermometer-half
+                i.fas.fa-thermometer-half.fa-3x
               h6 Nhiệt độ
               h1#text-temp 30°C
         .col-md-3
           .card#card-humid.card-humid
             .card-body.text-center
               h3
-                i.fas.fa-tint
+                i.fas.fa-tint.fa-3x
               h6 Độ ẩm
               h1#text-humid 65%
         .col-md-3
           .card#card-light.card-light
             .card-body.text-center
               h3
-                i.fas.fa-lightbulb
+                i.fas.fa-lightbulb.fa-3x
               h6 Ánh sáng
               h1#text-light Lux
         .col-md-3
@@ -41,7 +41,12 @@ html(lang="en")
                 i.fas.fa-wind(id='wind-speed-icon') 
               h6 Sức gió
               h1#text-wind 5 m/s
-
+      .row.g-4.mt-4
+        .col-md-12.text-center
+          .card.card-warning
+            .card-body
+              h3 Cảnh báo trong ngày
+              h1#text-warning 0 lần
       .row.mt-4
         .col-12
           .card#chart-card
@@ -50,7 +55,7 @@ html(lang="en")
               canvas#myChart
 
       .row.g-4.mt-4
-        .col-md-4
+        .col-md-3
           .card.card-light
             .card-body.text-center
               h3 #{lamp.name}
@@ -73,11 +78,11 @@ html(lang="en")
                   ) Bật
               .img-box
                 if lamp.status == "on"
-                  i.fas.fa-lightbulb(data-id=`${lamp.stt}-icon`, class="light-on")
+                  i.fas.fa-lightbulb.fa-3x(data-id=lamp.stt + '-icon', class="light-on")
                 else
-                  i.fas.fa-lightbulb(data-id=`${lamp.stt}-icon`, class="light-off")
+                  i.fas.fa-lightbulb.fa-3x(data-id=lamp.stt + '-icon', class="light-off")
 
-        .col-md-4
+        .col-md-3
           .card.card-fan
             .card-body.text-center
               h3 #{fan.name}
@@ -100,11 +105,11 @@ html(lang="en")
                   ) Bật
               .img-box
                 if fan.status == "on"
-                  i.fas.fa-fan(data-id=`${fan.stt}-icon`, class="fan-on")
+                  i.fas.fa-fan.fa-3x(data-id=fan.stt + '-icon', class="fan-on")
                 else
-                  i.fas.fa-fan(data-id=`${fan.stt}-icon`, class="fan-off")
+                  i.fas.fa-fan.fa-3x(data-id=fan.stt + '-icon', class="fan-off")
 
-        .col-md-4
+        .col-md-3
           .card.card-ac
             .card-body.text-center
               h3 #{air_conditioner.name}
@@ -127,9 +132,36 @@ html(lang="en")
                   ) Bật
               .img-box
                 if air_conditioner.status == "on"
-                  i.fas.fa-snowflake(data-id=`${air_conditioner.stt}-icon`, class="fan-on")
+                  i.fas.fa-snowflake.fa-3x(data-id=air_conditioner.stt + '-icon', class="fan-on")
                 else
-                  i.fas.fa-snowflake(data-id=`${air_conditioner.stt}-icon`, class="text-muted")
+                  i.fas.fa-snowflake.fa-3x(data-id=air_conditioner.stt + '-icon', class="text-muted")
+
+        .col-md-3
+          .card.card-device
+            .card-body.text-center
+              h3 #{device.name}
+              .btn-wrapper
+                if device.status == "on"
+                  button(
+                    type="button"
+                    data-status=device.status
+                    data-id=device.stt
+                    button-change-status
+                    class="badge badge-danger"
+                  ) Tắt
+                else
+                  button(
+                    type="button"
+                    data-status=device.status
+                    data-id=device.stt
+                    button-change-status
+                    class="badge badge-success"
+                  ) Bật
+              .img-box
+                if device.status == "on"
+                  i.fas.fa-cog.fa-3x(data-id=device.stt + '-icon', class="device-on")
+                else
+                  i.fas.fa-cog.fa-3x(data-id=device.stt + '-icon', class="device-off")
 
     form(
       action=""

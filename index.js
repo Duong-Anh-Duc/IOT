@@ -17,3 +17,20 @@ app.use(routes);
 app.listen(port, () => {
     console.log(`App listening on port ${port}`);
 });
+
+//  temperature
+// humidity
+// light
+const deviceModel = require("./models/deviceModel");
+const historyModel = require("./models/historyModel");
+const weatherModel = require("./models/weatherModel");
+// async function getDistinctTemperatures() {
+//     try {
+//       const data = await weatherModel.find({}).sort({temperature : -1})
+//       console.log(data);  // In ra mảng các giá trị temperature duy nhất
+//     } catch (err) {
+//       console.error(err);  // In ra lỗi nếu có
+//     }
+//   }
+  
+//   getDistinctTemperatures();

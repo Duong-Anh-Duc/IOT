@@ -1,60 +1,58 @@
 const History = require("../models/historyModel");
 const paginationRangeHelper = require("../helpers/paginationRange");
-
 module.exports.deviceData = async (req, res) => {
-    let filter = req.query.deviceFilter || 'all';
+    let deviceFilter = req.query.deviceFilter || 'all';
     let statusFilter = req.query.statusFilter || 'all';
     let page = parseInt(req.query.page) || 1;
     let limit = parseInt(req.query.limit) || 10;
-    let sortOrder = req.query.sortOrder || 'asc';
-    let dateFilter = req.query.dateFilter;
-    let timeFilter = req.query.timeFilter || '00:00:00'; 
+    let sortColumn = req.query.sortColumn || 'createdAt';
+    let sortOrder = req.query.sortOrder === 'asc' ? 1 : -1;
+    let dateFilter = req.query.dateTimeFilter ? req.query.dateTimeFilter.split(' ')[0] : null;
+    let timeFilter = req.query.dateTimeFilter ? req.query.dateTimeFilter.split(' ')[1] : null;
+
     let skip = (page - 1) * limit;
     let query = {};
-    if (filter !== 'all') {
-        query.name = filter;
+
+    if (deviceFilter !== 'all') {
+        query.name = deviceFilter;
     }
 
     if (statusFilter !== 'all') {
         query.status = statusFilter;
     }
-    if (dateFilter) {
-        let startDateTime = new Date(`${dateFilter}T${timeFilter}`);
-        let endDateTime;
-        if (timeFilter === '00:00:00') {
-            endDateTime = new Date(startDateTime);
-            endDateTime.setHours(23, 59, 59, 999);
-        } else {
-            endDateTime = new Date(startDateTime);
-            endDateTime.setSeconds(59, 999); 
-        }
 
-        query.createdAt = { $gte: startDateTime, $lte: endDateTime };
+    if (dateFilter) {
+        query.day = { $regex: new RegExp(`^${dateFilter}`) };
+    }
+
+    if (timeFilter) {
+        query.hour = { $regex: new RegExp(`^${timeFilter}`) };
+    }
+
+    let sortOptions = {};
+    if (sortColumn) {
+        sortOptions[sortColumn] = sortOrder;
     }
 
     try {
         let totalRecords = await History.countDocuments(query);
-        
+
         let data = await History.find(query)
-                                .sort({ createdAt: sortOrder === 'asc' ? 1 : -1 })
+                                .sort(sortOptions)
                                 .skip(skip)
                                 .limit(limit);
 
         const totalPages = Math.ceil(totalRecords / limit);
-        const pagination = paginationRangeHelper.paginationRange(page, totalPages);
 
         res.status(200).json({
             success: true,
             data: data,
             currentPage: page,
             totalPages: totalPages,
-            pagination: pagination,
             limit: limit,
-            sortOrder: sortOrder,
-            deviceFilter: filter,
+            deviceFilter: deviceFilter,
             statusFilter: statusFilter,
-            dateFilter: dateFilter,
-            timeFilter: timeFilter 
+            dateTimeFilter: req.query.dateTimeFilter 
         });
     } catch (error) {
         res.status(500).json({
@@ -64,6 +62,8 @@ module.exports.deviceData = async (req, res) => {
         });
     }
 };
+
+
 
 
 module.exports.devicePage = (req, res) => {

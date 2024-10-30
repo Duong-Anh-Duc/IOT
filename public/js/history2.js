@@ -1,40 +1,56 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const filterForm = document.getElementById('filterForm');
-    const sortFieldSelect = document.getElementById('sortField');
-    const sortOrderSelect = document.getElementById('sortOrder');
-    const sortOrderLabel = document.querySelector('label[for="sortOrder"]');
+    const temperatureInput = document.getElementById('temperature');
+    const humidityInput = document.getElementById('humidity');
+    const lightInput = document.getElementById('light');
+    const dateTimeFilterInput = document.getElementById('dateTimeFilter');
+    const limitSelect = document.getElementById('limitSelect');
+    const sensorTableBody = document.getElementById('sensorTable')?.getElementsByTagName('tbody')[0];
 
-    sortOrderSelect.style.display = 'none';
-    sortOrderLabel.style.display = 'none';
+    if (!temperatureInput || !humidityInput || !lightInput || !dateTimeFilterInput || !limitSelect || !sensorTableBody) {
+        console.error("One or more elements are missing in the DOM.");
+        return;
+    }
 
-    sortFieldSelect.addEventListener('change', function () {
-        if (sortFieldSelect.value !== 'none') {
-            sortOrderSelect.style.display = 'block';
-            sortOrderLabel.style.display = 'block';
-        } else {
-            sortOrderSelect.style.display = 'none';
-            sortOrderLabel.style.display = 'none';
-        }
-    });
-
+    // Tải dữ liệu lần đầu
     const urlParams = new URLSearchParams(window.location.search);
     const initialPage = urlParams.get('page') || 1;
-
     loadData(initialPage, false);
 
-    filterForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-        loadData(1, true);
-    });
+    // Sự kiện input cho các bộ lọc
+    temperatureInput.addEventListener('input', () => loadData(1, true));
+    humidityInput.addEventListener('input', () => loadData(1, true));
+    lightInput.addEventListener('input', () => loadData(1, true));
+    dateTimeFilterInput.addEventListener('input', () => loadData(1, true));
+    limitSelect.addEventListener('change', () => loadData(1, true));
 });
+const sortTable = (column, order) => {
+    // Gửi yêu cầu tới API với tham số sắp xếp
+    loadData(1, true, column, order);
+};
 
-const loadData = async (page = 1, shouldUpdateUrl = true) => {
-    const filterForm = document.getElementById('filterForm');
-    const weatherTableBody = document.getElementById('weatherTable').getElementsByTagName('tbody')[0];
+const loadData = async (page = 1, shouldUpdateUrl = true, sortColumn = null, sortOrder = null) => {
+    const temperatureInput = document.getElementById('temperature');
+    const humidityInput = document.getElementById('humidity');
+    const lightInput = document.getElementById('light');
+    const dateTimeFilterInput = document.getElementById('dateTimeFilter');
+    const limitSelect = document.getElementById('limitSelect');
+    const sensorTableBody = document.getElementById('sensorTable')?.getElementsByTagName('tbody')[0];
 
-    const formData = new FormData(filterForm);
-    formData.append('page', page);
-    const params = new URLSearchParams(formData).toString();
+    if (!sensorTableBody) {
+        console.error("Element 'sensorTable' or 'tbody' is missing.");
+        return;
+    }
+
+    const params = new URLSearchParams({
+        temperature: temperatureInput.value,
+        humidity: humidityInput.value,
+        light: lightInput.value,
+        dateTimeFilter: dateTimeFilterInput.value,
+        page,
+        limit: limitSelect.value,
+        sortColumn,
+        sortOrder
+    }).toString();
 
     try {
         const response = await axios.get(`/api/weatherData?${params}`);
@@ -45,7 +61,7 @@ const loadData = async (page = 1, shouldUpdateUrl = true) => {
             history.pushState(null, '', newUrl);
         }
 
-        weatherTableBody.innerHTML = '';
+        sensorTableBody.innerHTML = '';
 
         records.forEach((record, index) => {
             const row = document.createElement('tr');
@@ -57,15 +73,17 @@ const loadData = async (page = 1, shouldUpdateUrl = true) => {
                 <td>${record.light} lux</td>
                 <td>${record.day} ${record.hour}</td>
             `;
-            weatherTableBody.appendChild(row);
+            sensorTableBody.appendChild(row);
         });
 
-        updatePagination(currentPage, totalPages, limit);
+        updatePagination(currentPage, totalPages);
 
     } catch (error) {
         console.error('Error fetching weather data:', error);
     }
 };
+
+
 const updatePagination = (currentPage, totalPages, limit) => {
     const paginationWrapper = document.querySelector('.pagination');
 

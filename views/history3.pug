@@ -3,7 +3,7 @@ html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title Data Sensor
+    title Data Sensor New
     link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
     link(rel="stylesheet", href="/css/history2.css") 
     link(rel="stylesheet", href="/css/footer.css")
@@ -26,6 +26,8 @@ html(lang="en")
                 th
                   input#light.form-control(type="number", name="light", step="0.01", placeholder="Nhập ánh sáng")
                 th
+                  input#windSpeed.form-control(type="number", name="windSpeed", step="0.01", placeholder="Nhập sức gió")
+                th
                   input#dateTimeFilter.form-control(type="text", name="dateTimeFilter", placeholder="dd/MM/yyyy hh:mm:ss")
               tr
                 th STT
@@ -44,6 +46,11 @@ html(lang="en")
                     i.fas.fa-sort-up
                   button.btn-sort(type="button", onclick="sortTable('light', 'desc')")
                     i.fas.fa-sort-down
+                th Sức gió (m/s)
+                  button.btn-sort(type="button", onclick="sortTable('windSpeed', 'asc')")
+                    i.fas.fa-sort-up
+                  button.btn-sort(type="button", onclick="sortTable('windSpeed', 'desc')")
+                    i.fas.fa-sort-down
                 th Thời điểm đo
                   button.btn-sort(type="button", onclick="sortTable('createdAt', 'asc')")
                     i.fas.fa-sort-up
@@ -60,9 +67,10 @@ html(lang="en")
               option(value="25") 25
               option(value="50") 50
               option(value="100") 100
+
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js")
     script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
     script(src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
     script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
-    script(src="/js/history2.js")
+    script(src="/js/history3.js")

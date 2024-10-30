@@ -40,4 +40,34 @@ body {
   tbody tr:hover {
     background-color: #e9ecef;
   }
-  
+.d-flex.justify-content-between.align-items-center.mt-3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.form-group.mb-0 {
+    margin-bottom: 0;
+}
+
+#limitSelect {
+    width: 100px;
+}
+
+h2 {
+  color: #343a40;
+  font-size: 1.75rem;
+  margin-bottom: 20px;
+  text-align: center; /* Căn giữa chữ trong thẻ h2 */
+}
+/* Ẩn nút tăng giảm cho các ô nhập liệu kiểu number với class 'no-spin' */
+.no-spin::-webkit-outer-spin-button,
+.no-spin::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.no-spin {
+    -moz-appearance: textfield; /* Ẩn nút tăng giảm trong Firefox */
+}

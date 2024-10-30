@@ -8,24 +8,13 @@ module.exports.index = async (req, res) => {
         pageTitle : "hehe",
         lamp : device[0],
         fan : device[1],
-        air_conditioner : device[2]
+        air_conditioner : device[2],
+        device : device[3]
     });
 };
 module.exports.changeStatus = async (req, res) => {
     const { status, id } = req.body;
-    await Device.updateOne({ stt: id }, { status: status });
-    const data = await Device.findOne({ stt: id });
-
-    const currentDate = new Date();
-    const day = `${currentDate.getDate().toString().padStart(2, '0')}/${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
-    const hour = `${currentDate.getHours().toString().padStart(2, '0')}:${currentDate.getMinutes().toString().padStart(2, '0')}:${currentDate.getSeconds().toString().padStart(2, '0')}`;
-    
-    await History.create({
-        name: data.name,
-        status: data.status,
-        day: day,
-        hour: hour
-    });
+    console.log(req.body);
 
     let mqttMessage;
     switch (id) {
@@ -38,22 +27,41 @@ module.exports.changeStatus = async (req, res) => {
         case "3":
             mqttMessage = status === "on" ? "3:1" : "3:0";
             break;
+        case "4":
+            mqttMessage = status === "on" ? "4:1" : "4:0";
+            break;
+        default:
+            return res.status(400).json({ error: 'Invalid status or ID' });
     }
+    mqttService.publishMessage('home/device/control', mqttMessage);
+    mqttService.subscribeToTopic('home/device/status');
+    const timeout = setTimeout(() => {
+        mqttClient.removeListener('message', messageHandler);
+        return res.status(500).json({ error: 'MQTT response not received in time' });
+    }, 5000);
 
-    if (mqttMessage) {
-        mqttService.publishMessage('home/device/control', mqttMessage);
+    let messageHandler = async (receivedTopic, message) => {
+        const sensorData = message.toString();
+        if (receivedTopic === 'home/device/status' && sensorData === mqttMessage) {
+            console.log(`Received device status: ${sensorData}`);
+            clearTimeout(timeout);
+            await Device.updateOne({ stt: id }, { status: status });
+            const data = await Device.findOne({ stt: id });
+            const currentDate = new Date();
+            const day = `${currentDate.getDate().toString().padStart(2, '0')}/${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
+            const hour = `${currentDate.getHours().toString().padStart(2, '0')}:${currentDate.getMinutes().toString().padStart(2, '0')}:${currentDate.getSeconds().toString().padStart(2, '0')}`;
 
-        mqttService.subscribeToTopic('home/device/status');
-        let messageHandler = (receivedTopic, message) => {
-            const sensorData = message.toString();
-            if (receivedTopic === 'home/device/status' && sensorData === mqttMessage) {
-                console.log(`Received device status: ${sensorData}`);
-                mqttClient.removeListener('message', messageHandler); 
-                res.json({ status: data.status });
-            }
-        };
-        mqttClient.on('message', messageHandler);
-    } else {
-        res.status(400).json({ error: 'Invalid status or ID' });
-    }
+            await History.create({
+                name: data.name,
+                status: data.status,
+                day: day,
+                hour: hour
+            });
+            mqttClient.removeListener('message', messageHandler);
+            res.json({ 
+                message : "Change-Status success!",
+                status: data.status });
+        }
+    };
+    mqttClient.on('message', messageHandler);
 };

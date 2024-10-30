@@ -9,6 +9,7 @@ router.get("/profile", (req, res) => {
     res.render("profile.pug");
 });
 router.get("/devicePage", historyDeviceController.devicePage);
+router.get("/weatherPage2", historySensorController.weatherPage2);
 router.get("/api/deviceData", historyDeviceController.deviceData);
 router.get("/weatherPage", historySensorController.weatherPage);
 router.get("/api/weatherData", historySensorController.weatherData);

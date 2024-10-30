@@ -3,69 +3,59 @@ html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title Lịch sử bật tắt thiết bị
+    title Action History
     link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
     link(rel="stylesheet", href="/css/history1.css")
     link(rel="stylesheet", href="/css/footer.css")
     link(rel="stylesheet", href="/css/header.css")
     link(rel="stylesheet", href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css")
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css")
   body
     include ./header/header.pug
     main#content.wrapper
       .container.mt-5
-        h2 Lịch sử bật tắt thiết bị
-        form(action="", method="GET", class="mb-4 form-search d-flex justify-content-between align-items-center", id="filterForm")
-          .form-group
-            label(for="deviceFilter") Thiết bị
-            select#deviceFilter.form-control(name="deviceFilter")
-              option(value="all") Tất cả
-              option(value="Đèn") Đèn
-              option(value="Quạt") Quạt
-              option(value="Điều hoà") Điều hoà
-          .form-group
-            label(for="statusFilter") Trạng thái
-            select#statusFilter.form-control(name="statusFilter")
-              option(value="all") Tất cả
-              option(value="on") Bật
-              option(value="off") Tắt
-          .form-group
-            label(for="sortOrder") Thời gian
-            select#sortOrder.form-control(name="sortOrder")
-              option(value="asc") Tăng dần
-              option(value="desc") Giảm dần
-
-          .form-group
-            label(for="limitSelect") Số bản ghi mỗi trang
-            select#limitSelect.form-control(name="limit")
-              option(value="10") 10
-              option(value="25") 25
-              option(value="50") 50
-              option(value="100") 100
-
-          .form-group
-            label(for="dateFilter") Ngày
-            input#dateFilter.form-control(type="date", name="dateFilter")
-          .form-group
-            label(for="timeFilter") Giờ
-            input#timeFilter.form-control(type="time", name="timeFilter", step="1")
-          button.btn.btn-primary#filterButton(type="submit") Lọc
-
         div#tableWrapper
           table#deviceTable.table.table-striped
             thead
+              tr.filter-row
+                th
+                th
+                  select#deviceFilter.form-control(name="deviceFilter")
+                    option(value="all") Tất cả thiết bị
+                    option(value="Đèn") Đèn
+                    option(value="Quạt") Quạt
+                    option(value="Điều hoà") Điều hoà
+                    option(value="CB gió") CB gió
+                th
+                  select#statusFilter.form-control(name="statusFilter")
+                    option(value="all") Tất cả trạng thái
+                    option(value="on") Bật
+                    option(value="off") Tắt
+                th
+                  input#dateTimeFilter.form-control(type="text", name="dateTimeFilter", placeholder="dd/MM/yyyy hh:mm:ss")
               tr
                 th STT
                 th Thiết bị
                 th Trạng thái
                 th Thời điểm
+                  button.btn-sort(type="button", onclick="sortTable('createdAt', 'asc')")
+                    i.fas.fa-sort-up
+                  button.btn-sort(type="button", onclick="sortTable('createdAt', 'desc')")
+                    i.fas.fa-sort-down
             tbody
 
-        nav.mt-4
-          ul.pagination.justify-content-center#paginationWrapper
+        div.d-flex.justify-content-between.align-items-center.mt-3
+          nav
+            ul.pagination.mb-0#paginationWrapper
+          .form-group.mb-0
+            select#limitSelect.form-control(name="limit")
+              option(value="10") 10
+              option(value="25") 25
+              option(value="50") 50
+              option(value="100") 100
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js")
     script(src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js")
     script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
     script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
     script(src="/js/history1.js")
-

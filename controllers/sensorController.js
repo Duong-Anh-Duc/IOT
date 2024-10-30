@@ -2,8 +2,12 @@ const Weather = require("../models/weatherModel");
 module.exports.getSensorData = async (req, res) => {
     try {
         const latestData = await Weather.findOne().sort({ createdAt: -1 });
-        if (latestData) {
+        const tmp = new Date().toISOString().split("T")[0];
+        const day = tmp.substring(8) + "/" + tmp.substring(5, 7) + "/" + tmp.substring(0, 4);
+        const count = await Weather.countDocuments({windSpeed : {$gt : 70}, day : day});
+            if (latestData) {
             res.json({
+                countWarning : count,
                 success: true,
                 temperature: latestData.temperature,
                 humidity: latestData.humidity,

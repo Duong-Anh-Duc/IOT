@@ -6,40 +6,37 @@ html(lang="en")
     title IOT Profile
     link(rel="stylesheet", href="/css/profile.css")
     link(rel="stylesheet", href="/css/header.css")
-    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css")
     link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css")
   body
     include ./header/header.pug
     main#content.container-fluid
       .main.container
-        .card
-          .card-body.d-flex.flex-column.align-items-center
-            img#profile-img(src= avatarURL alt="Profile")
+        .card.profile-card
+          .profile-header
+            img#profile-img(src= avatarURL || 'https://via.placeholder.com/130', alt="Profile Image", class="profile-image")
             h2.text-center.mb-0 Tên: Dương Anh Đức
             h4.text-center.mt-1 Mã sinh viên: B21DCCN239
             h4.text-center.mt-1 Lớp: CNPM06
-        .upload-container.text-center
-          h3 Upload Avatar
-          form#avatar-form(method="post" enctype="multipart/form-data" action="/upload-avatar")
-            input(type="file" accept="image/*" name="avatar" id="avatar-input" class="form-control mb-2")
-            button.btn.btn-primary(type="submit") Tải lên ảnh đại diện
-        .upload-container.text-center
-          h3 Upload Báo Cáo PDF
-          form(method="post" enctype="multipart/form-data" action="http://your-server-endpoint/upload")
-            input(type="file" accept=".pdf" name="file" class="form-control mb-2")
-            button.btn.btn-primary(type="submit") Tải lên báo cáo PDF
-        .link-container.text-center
-          h3 Link GitHub
-          a.btn.btn-outline-primary(href="https://github.com/Duong-Anh-Duc/IOT" target="_blank")
-            i.fab.fa-github
-            | GitHub
-        .link-container.text-center
-          h3 API Documentation
-          a.btn.btn-outline-primary(href="https://your-api-docs.com" target="_blank")
-            i.fas.fa-code
-            | Xem API Docs
-    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js")
-    script(src="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/js/bootstrap.min.js")
-    script(src="https://cdn.jsdelivr.net/npm/chart.js")
-    script(src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js")
-    script(src="/js/profile.js")
+          hr
+          .profile-upload-container.text-center
+            h3 Upload Báo Cáo PDF
+            form(method="post" enctype="multipart/form-data" action="/upload-pdf")
+              input(type="file" accept=".pdf" name="file" class="form-control mb-2")
+              button.btn.btn-primary(type="submit") Tải lên PDF
+          hr
+          .profile-link-container.text-center
+            h3 Link GitHub
+            a.btn.btn-link(href="https://github.com/Duong-Anh-Duc/IOT" target="_blank")
+              i.fab.fa-github
+              | GitHub
+            hr
+            h3 API Documentation
+            a.btn.btn-link(href="https://docs.google.com/document/d/1WFrF159IW9n_-AC_qbWkLGgpSa-TDNHvPBB4epvV6oA/edit?tab=t.0" target="_blank")
+              i.fas.fa-code
+              | API Docs
+          .profile-social-links.text-center
+            a.btn.btn-outline-primary(href="https://linkedin.com" target="_blank")
+              i.fab.fa-linkedin
+            a.btn.btn-outline-primary(href="https://twitter.com" target="_blank")
+              i.fab.fa-twitter
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js")
