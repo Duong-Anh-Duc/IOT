@@ -4,7 +4,7 @@ require("dotenv").config()
 const app = express();
 const port = 3000;
 const {subscribeToTopic} = require("./services/mqttService")
-//subscribeToTopic("home/sensor")
+subscribeToTopic("home/sensor")
 app.use(express.json())
 app.use(methodOverride('_method'));
 app.use(express.static('public'));
@@ -24,13 +24,28 @@ app.listen(port, () => {
 const deviceModel = require("./models/deviceModel");
 const historyModel = require("./models/historyModel");
 const weatherModel = require("./models/weatherModel");
-// async function getDistinctTemperatures() {
-//     try {
-//       const data = await weatherModel.find({}).sort({temperature : -1})
-//       console.log(data);  // In ra mảng các giá trị temperature duy nhất
-//     } catch (err) {
-//       console.error(err);  // In ra lỗi nếu có
-//     }
-//   }
+async function Querry() {
+    const day = new Date()
+    day.setHours(0, 0, 0, 0)
+    try {
+      const data = await historyModel.aggregate([
+        {
+          $group : {
+            _id : {
+              name : "$name",
+              status : "$status"
+            },
+
+            count : {$sum : 1}
+          }
+        }
+      ])
+        
   
-//   getDistinctTemperatures();
+      console.log(data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  
+  }
+Querry()

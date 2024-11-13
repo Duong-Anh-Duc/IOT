@@ -4,18 +4,18 @@ document.addEventListener('DOMContentLoaded', function() {
   const humidElement = document.getElementById('text-humid');
   const lightElement = document.getElementById('text-light');
   const windSpeedElement = document.getElementById('text-wind');
-  const warningElement = document.getElementById('text-warning'); // phần tử hiển thị cảnh báo
+  const warningElement = document.getElementById('text-warning');
   
   const tempIcon = document.querySelector('#card-temp i');
   const humidIcon = document.querySelector('#card-humid i');
   const lightIcon = document.querySelector('#card-light i');
   const windSpeedIcon = document.querySelector('#wind-speed-icon');
   
-  let temperatureData = JSON.parse(sessionStorage.getItem('temperatureData')) || [];
-  let humidityData = JSON.parse(sessionStorage.getItem('humidityData')) || [];
-  let lightData = JSON.parse(sessionStorage.getItem('lightData')) || [];
-  let windSpeedData = JSON.parse(sessionStorage.getItem('windSpeedData')) || [];
-  let labelsData = [...Array(10).keys()];
+  let temperatureData = JSON.parse(localStorage.getItem('temperatureData')) || [];
+  let humidityData = JSON.parse(localStorage.getItem('humidityData')) || [];
+  let lightData = JSON.parse(localStorage.getItem('lightData')) || [];
+  let windSpeedData = JSON.parse(localStorage.getItem('windSpeedData')) || [];
+  let labelsData = [...Array(20).keys()]; // updated to hold 20 labels
   
   const myChart = new Chart(ctx, {
     type: 'line',
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         labelsData.push(labelsData[labelsData.length - 1] + 1); 
         labelsData.shift();
-        if (temperatureData.length > 10) {
+        if (temperatureData.length > 20) {  // updated to retain 20 entries
           temperatureData.shift();
           humidityData.shift();
           lightData.shift();
@@ -99,12 +99,12 @@ document.addEventListener('DOMContentLoaded', function() {
         lightElement.textContent = `${light} Lux`;
         windSpeedElement.textContent = `${windSpeed} m/s`; 
 
-        sessionStorage.setItem('temperatureData', JSON.stringify(temperatureData));
-        sessionStorage.setItem('humidityData', JSON.stringify(humidityData));
-        sessionStorage.setItem('lightData', JSON.stringify(lightData));
-        sessionStorage.setItem('windSpeedData', JSON.stringify(windSpeedData)); 
+        localStorage.setItem('temperatureData', JSON.stringify(temperatureData));
+        localStorage.setItem('humidityData', JSON.stringify(humidityData));
+        localStorage.setItem('lightData', JSON.stringify(lightData));
+        localStorage.setItem('windSpeedData', JSON.stringify(windSpeedData)); 
 
-        if (windSpeed > 70) {
+        if (windSpeed >= 60) {
           document.querySelector('.card-wind').classList.add('blinking-background'); 
         } else {
           document.querySelector('.card-wind').classList.remove('blinking-background'); 
@@ -145,6 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
   fetchSensorData();
   setInterval(fetchSensorData, 5000); 
 });
+
 
 
 const buttonChangeStatus = document.querySelectorAll("[button-change-status]");

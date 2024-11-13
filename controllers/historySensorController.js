@@ -12,7 +12,7 @@ module.exports.weatherData = async (req, res) => {
     let windSpeed = req.query.windSpeed ? parseFloat(req.query.windSpeed) : null;
     let dateFilter = req.query.dateTimeFilter ? req.query.dateTimeFilter.split(' ')[0] : null;
     let timeFilter = req.query.dateTimeFilter ? req.query.dateTimeFilter.split(' ')[1] : null;
-
+    console.log(req.query.dateTimeFilter)
     let skip = (page - 1) * limit;
     let query = {};
 

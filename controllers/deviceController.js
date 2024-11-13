@@ -12,6 +12,16 @@ module.exports.index = async (req, res) => {
         device : device[3]
     });
 };
+module.exports.index1 = async(req, res) => {
+    const device = await Device.find({});
+    res.render("../views/index1.pug", {
+        pageTitle : "hehe",
+        lamp : device[0],
+        fan : device[1],
+        air_conditioner : device[2],
+        device : device[3]
+    });
+}
 module.exports.changeStatus = async (req, res) => {
     const { status, id } = req.body;
     console.log(req.body);

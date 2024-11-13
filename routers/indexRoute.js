@@ -14,6 +14,7 @@ router.get("/api/deviceData", historyDeviceController.deviceData);
 router.get("/weatherPage", historySensorController.weatherPage);
 router.get("/api/weatherData", historySensorController.weatherData);
 router.get("/", deviceController.index);
+router.get("/Bai5", deviceController.index1)
 router.post("/api/change-status", deviceController.changeStatus);
 router.get("/sensor-data", sensorController.getSensorData);
 router.post('/upload-avatar', uploadAvatar);

@@ -1,10 +1,11 @@
 const Weather = require("../models/weatherModel");
+const Device = require("../models/deviceModel")
 module.exports.getSensorData = async (req, res) => {
     try {
         const latestData = await Weather.findOne().sort({ createdAt: -1 });
-        const tmp = new Date().toISOString().split("T")[0];
-        const day = tmp.substring(8) + "/" + tmp.substring(5, 7) + "/" + tmp.substring(0, 4);
-        const count = await Weather.countDocuments({windSpeed : {$gt : 70}, day : day});
+        const day = new Date()
+        day.setHours(0, 0, 0, 0)
+        const count = await Weather.countDocuments({windSpeed : {$gte : 60}, createdAt : {$gte : day}});
             if (latestData) {
             res.json({
                 countWarning : count,
@@ -37,7 +38,7 @@ module.exports.saveSensorData = async (temperature, humidity, light, windSpeed) 
         });
 
         await newData.save();
-        console.log('Dữ liệu cảm biến đã được lưu');
+        //console.log('Dữ liệu cảm biến đã được lưu');
     } catch (error) {
         console.error('Lỗi khi lưu dữ liệu cảm biến:', error);
     }
